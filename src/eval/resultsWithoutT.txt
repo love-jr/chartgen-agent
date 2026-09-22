@@ -1,0 +1,4 @@
+Model: deepseek
+Average Scores: [0.0, 0.0, 0.0, 0.0, 0.0]
+Success Rate: 55.00
+==============================

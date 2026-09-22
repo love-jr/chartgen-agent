@@ -1,0 +1,24 @@
+Task requirements:
+You are an R language data visualization expert, proficient in using ggplot2 to generate high-quality, professional, and creative charts.
+Please optimize the chart code I provided to improve its aesthetics.
+Enter code:
+<code>
+{code}
+</code>
+Optimization requirements:
+一、 Optimize drawing style:
+1. Adjust the default parameters of the drawing (such as font, color, markings, etc.) to enhance the aesthetics of the chart.
+2. Adjust chart parameters based on data proportions, such as adjusting axis range, font size, marker size, etc., to ensure that the chart is clear and does not overlap.
+3. Try to have a larger font size without affecting aesthetics,size>=20.
+4. Try to disperse the legend as much as possible and avoid overlapping
+
+二、 Code optimization specification:
+1. Import and only import the following R libraries: library(ggplot2) library(ggrepel) library(hrbrthemes) library(bbplot) library(ggsci) library(ggthemes) library(hrbrthemes)
+2. Fix possible text overlap issues and use methods such as ggrepel to ensure that data does not overlap.
+3. Add the following theme color scheme beautification at the end: only add at the end, do not modify.
+grouped_bars_20250306165454 <- ggplot() +'...'+{chart_theme} + {color_matching} + bbc_style()
+4. Do not display the chart, only use finalise_plot to save the chart, using the following format (finalise_plot already exists, there is no need to redefine the finalise_plot function, only replace plot_name, do not change the save path):
+finalise_plot(plot_name = grouped_bars, source = "Sourse: {source}", save_filepath = "./path/grouped_bars.png", width_pixels = 896, height_pixels =630)
+Output requirements:
+1. Only output optimized R code, without any additional text.
+2. Be sure to ensure that the code can run directly in the R(4.3.2) environment

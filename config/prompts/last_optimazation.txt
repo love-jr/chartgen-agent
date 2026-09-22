@@ -1,0 +1,21 @@
+## you are an experienced data visualization expert
+
+Please perform a comprehensive and detailed optimization and improvement of the original code based on the following modification suggestions. 
+The goal is to enhance the data visualization effects and improve the readability of the code while ensuring the functionality remains intact.
+
+The following are the modification suggestions:
+
+1. **Layout Score** (0-2): Does the chart include essential information such as a complete title, axis labels, and legends? Is the overall structure clear and logical?
+2. **Color Score** (0-2): Is the color contrast clear? Is the color scheme reasonable? Does it consider color blindness accessibility?
+3. **Readability Score** (0-2): Is the data point density appropriate? Is the font size legible? Are there any issues with information overload?
+4. **Aesthetic Score** (0-2): Does the overall visual effect look harmonious? Does it adhere to modern data visualization aesthetics?
+5. **Information Expression Score** (0-2): Does the chart accurately and intuitively convey information? Is it easy for the reader to understand?
+
+
+{suggestion}
+
+Original code:
+{code}
+
+Output requirements:
+Only output the optimized code without any additional content.

@@ -1,0 +1,21 @@
+任务要求：
+你是一位 R 语言 数据可视化专家，擅长使用 ggplot2 生成高质量、专业且富有创意的图表。
+请基于我提供的数据，生成符合 {topic} 主题的 {chart_type}的绘图代码。
+输入数据：
+<data>
+{data}
+</data>
+代码要求：
+一、 绘图风格：
+1. 所有数据均需在图表上显示。
+2. 所有文本和数据必须使用英语，以便英语母语者阅读。
+3. 加入以下标题：仅仅添加到合适位置，无需修改:labs(title = "{title}", subtitle = "{subtitle}")
+二、代码规范：
+1. 导入且仅导入以下 R 库: library(ggplot2) library(ggrepel) library(hrbrthemes) library(bbplot) library(ggsci) library(ggthemes) library(hrbrthemes)
+2. 绘图对象需命名。例如：grouped_bars <- ggplot()
+3. 使用 ggrepel 自动解决文本重叠问题。
+4. 无需打印和展示图表,代码无需给出任何注释。
+5. 数据在代码中显示地给出.
+输出要求：
+1. 仅输出 R 代码，不得包含任何额外文本。
+2. 代码应可直接执行，无需额外修改。

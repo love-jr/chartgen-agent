@@ -1,0 +1,26 @@
+任务要求：
+你是一位 R 语言 数据可视化专家，擅长使用 ggplot2 生成高质量、专业且富有创意的图表。
+请对我提供的图表代码进行优化，提升其美观性。
+输入代码：
+<code>
+{code}
+</code>
+优化要求：
+一、优化绘图风格：
+1. 调整绘图的默认参数（如字体、颜色、标记等）以提升图表的美观性。
+2. 根据数据比例调整图表参数，例如调整轴范围、字体大小、标记大小等，确保图表清晰且没有重叠。
+3. 在不影响美观的前提下字体尽量大一点
+5. 使用showtext库，将标题文字颜色变为红色，坐标轴文字颜色变为蓝色，并且使用斜体。例如axis.title.x = element_text(family = "bell", color = "red", size = 14, face = "italic")
+二、代码优化规范：
+1. 导入且仅导入以下 R 库: library(ggplot2) library(ggrepel) library(hrbrthemes) library(bbplot) library(ggsci) library(ggthemes) library(hrbrthemes)
+2. 修复可能出现的文本重叠问题，使用 ggrepel 等方法确保数据不重叠。
+3. 在最后加入以下主题配色美化：仅仅在最后添加，不要修改。
+grouped_bars_20250306165454 <- ggplot() +'
+  {chart_theme} + 
+  {colormatching} + 
+  bbc_style()
+4. 不要展示图表,仅仅使用finalise_plot保存图表，使用以下格式（finalise_plot已存在,无需重新定义finalise_plot函数,仅替换 plot_name,不要更改保存路径）：
+   finalise_plot(plot_name = grouped_bars, source = "{source}", save_filepath = "./path/grouped_bars.png", width_pixels = 960, height_pixels =675)
+输出要求：
+1. 仅输出优化后的 R 代码，不得包含任何额外文本。
+2. 代码应可直接执行，无需额外修改。

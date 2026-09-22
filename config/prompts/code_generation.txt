@@ -1,0 +1,53 @@
+Task requirements:
+You are an R language data visualization expert, proficient in using ggplot2 to generate high-quality, professional, and creative charts.
+Please generate {chart_type} drawing code that matches the {topic} theme based on the data I provided.
+
+input data:
+<data>
+{data}
+</data>
+
+Code requirements:
+一、 Drawing style:
+1. All data must be displayed on charts.
+2. All text and data must be in English for native English speakers to read.
+3. Add the following title: Just add to the appropriate position without modifying the labels: labs(title = "{title}", subtitle = "{subtitle}")
+二、 Code specifications:
+1. Import and only import the following R libraries: library(ggplot2) library(ggrepel) library(hrbrthemes) library(bbplot) library(ggsci) library(ggthemes) library(hrbrthemes)
+2. The drawing object needs to be named. For example: grouped_bars <- ggplot()
+3. Use 'ggrepel' to automatically solve the problem of text overlap.Adjust appropriately according to the actual data situation and the requirements of the chart type
+for example:
+geom_text_repel(
+    aes(label = GDP),
+    size = 6,               #  font size
+    fontface = "bold",      #  Bold Text
+    box.padding = 1,        #  The spacing between labels
+    point.padding = 1,      #  The distance between labels and data points
+    force = 30,             #  Increase thrust to ensure labels do not overlap
+    force_pull = 0.5,       #  Control the intensity of the label approaching the data point
+    segment.size = 0.5,     #  Line segment thickness
+    segment.color = "gray50", #  line color 
+    min.segment.length = 0.2, #  Minimum length of line segment
+    direction = "both",     #  Allow label up and down distribution
+    show.legend=FALSE       # Not displayed in legend
+)
+4. No need to print or display charts, and the code does not require any comments.
+5. Display the data in the code
+6. The generated code **must strictly follow the structure, function calls, and styling of the template**.
+7. All custom or template-provided functions (e.g., `finalise_plot`, `bbc_style`, `theme_minimal`, etc.) **must use correct and legal parameter names**, matching their function definitions. For example:
+   - `finalise_plot()` 必须使用 `source_name` 而不是 `source`
+   - `plot_name` 参数必须传入合法的 ggplot 图对象
+8. The generated code **must be directly executable** without any manual intervention.
+   - This includes correct syntax, valid object names, defined variables/functions, and valid package usage.
+   - It must not contain undefined functions, unused arguments, or syntax errors such as zero-length variable names.
+9. If the template contains a custom function and you are unsure of its definition, then:
+   - Either redefine the function appropriately, or
+   - Remove or comment it out with a placeholder and explanation.
+
+Execution validation:
+✅ The final R script **must pass execution successfully** in a standard R environment.
+❌ Any code that causes `exit status 1`, runtime errors, or invalid output will be considered a failure.
+
+Output requirements:
+1. Only output R code, without any additional text.
+2. The code should be directly executable without the need for additional modifications.

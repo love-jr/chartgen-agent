@@ -1,0 +1,34 @@
+Model: deepseek
+【优化前平均得分】
+Expression: 无数据
+Aesthetic: 无数据
+Readability: 无数据
+Color: 无数据
+Layout: 无数据
+Total: 无数据
+
+【优化后平均得分】
+Expression: 无数据
+Aesthetic: 无数据
+Readability: 无数据
+Color: 无数据
+Layout: 无数据
+Total: 无数据
+==============================
+Model: deepseek
+【优化前平均得分】
+Expression: 无数据
+Aesthetic: 无数据
+Readability: 无数据
+Color: 无数据
+Layout: 无数据
+Total: 无数据
+
+【优化后平均得分】
+Expression: 无数据
+Aesthetic: 无数据
+Readability: 无数据
+Color: 无数据
+Layout: 无数据
+Total: 无数据
+==============================

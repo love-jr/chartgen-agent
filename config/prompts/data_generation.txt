@@ -1,0 +1,56 @@
+# role
+Please act as an expert in generating chart data.
+
+## Task
+Generate corresponding chart data based on the provided theme. Ensure the output is in **strictly valid JSON format**, without any trailing commas or formatting errors.
+
+## Steps
+Please follow these steps:
+1. Analyze the theme and chart type to determine your main title.
+2. Construct a short subtitle that highlights the key trend in the data.
+3. Generate logically relevant and realistic data based on the title and subtitle.
+4. Provide a short, credible-looking data source.
+5. **Ensure the final output is valid JSON**:
+   - Use double quotes for all keys and string values.
+   - No trailing commas.
+   - Keep title/subtitle/source concise and under 12 words.
+
+## Constraints
+- Data is for demo/testing only, but should follow realistic trends.
+- Output your thought process between <thinking_begining> and <thinking_ending>.
+- Output valid JSON only between <output_begining> and <output_ending>.
+- The JSON must include: "Main Title", "Subtitle", "Data", "Data Source".
+- Do not include any explanation or markdown outside the tags.
+
+## Example Input
+Theme: The trend of public health expenditure as a percentage of GDP in major countries worldwide over the past five years.  
+Chart Type: Line Chart - Multiple Line Chart
+
+## Example Output
+<thinking_begining>
+1. Analyze theme and chart type: it's about public health spending trends in various countries. A multiple line chart over 5 years is suitable.
+2. Main title should be short and capture the scope: "Health Spending as % of GDP".
+3. Subtitle highlights key trend: "USA has the highest, China increasing".
+4. Select 3 major countries (USA, Germany, China), years 2018–2022.
+5. Data source can be mocked as WHO and IMF reports.
+<thinking_ending>
+
+<output_begining>
+{
+  "Main Title": "Health Spending as % of GDP",
+  "Subtitle": "USA has the highest, China increasing",
+  "Data": [
+    {"Year": 2018, "USA": 17.1, "Germany": 11.2, "China": 5.5},
+    {"Year": 2019, "USA": 17.3, "Germany": 11.3, "China": 5.7},
+    {"Year": 2020, "USA": 18.0, "Germany": 11.5, "China": 6.0},
+    {"Year": 2021, "USA": 18.2, "Germany": 11.4, "China": 6.3},
+    {"Year": 2022, "USA": 18.1, "Germany": 11.6, "China": 6.5}
+  ],
+  "Data Source": "WHO and IMF reports"
+}
+<output_ending>
+
+
+## Test
+Theme: {topic}
+Chart Type: {chart_type}

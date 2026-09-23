@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+message: "如果本工作对你的研究有帮助，请按下列信息引用。"
+title: "ChartGen-Agent: A Three-Stage Framework for Automated High-Quality Chart Generation"
+type: software
+authors:
+  # 请补全作者信息（姓名、单位、ORCID 可选）
+  - family-names: "TODO"
+    given-names: "TODO"
+    affiliation: "TODO"
+repository-code: "https://github.com/love-jr/chartgen-agent"
+url: "https://github.com/love-jr/chartgen-agent"
+abstract: >-
+  一套自动生成高质量图表的 Agent 框架，将「主题到成图」拆分为数据生成、
+  代码生成、评估与优化三个阶段；每个阶段独立可替换，并支持带模板与
+  不带模板两条生成路线的对比实验。
+keywords:
+  - chart generation
+  - data visualization
+  - large language models
+  - LLM agent
+  - ggplot2
+license: MIT
+# 论文正式发表后请补全以下字段
+# preferred-citation:
+#   type: article
+#   title: "ChartGen-Agent: A Three-Stage Framework for Automated High-Quality Chart Generation"
+#   authors:
+#     - family-names: "TODO"
+#       given-names: "TODO"
+#   journal: "TODO"
+#   year: 2025
+#   doi: "10.xxxx/xxxxx"

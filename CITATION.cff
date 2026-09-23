@@ -3,10 +3,21 @@ message: "如果本工作对你的研究有帮助，请按下列信息引用。"
 title: "ChartGen-Agent: A Three-Stage Framework for Automated High-Quality Chart Generation"
 type: software
 authors:
-  # 请补全作者信息（姓名、单位、ORCID 可选）
-  - family-names: "TODO"
-    given-names: "TODO"
-    affiliation: "TODO"
+  - family-names: "Jiang"
+    given-names: "Rui"
+    affiliation: "Chongqing University"
+  - family-names: "Wu"
+    given-names: "Shenrong"
+    affiliation: "Chongqing University"
+  - family-names: "Wu"
+    given-names: "Zhehao"
+    affiliation: "Chongqing University"
+  - family-names: "Han"
+    given-names: "Zhenjie"
+    affiliation: "Chongqing University"
+  - family-names: "Zhong"
+    given-names: "Jiang"
+    affiliation: "Chongqing University"
 repository-code: "https://github.com/love-jr/chartgen-agent"
 url: "https://github.com/love-jr/chartgen-agent"
 abstract: >-
@@ -20,13 +31,26 @@ keywords:
   - LLM agent
   - ggplot2
 license: MIT
-# 论文正式发表后请补全以下字段
-# preferred-citation:
-#   type: article
-#   title: "ChartGen-Agent: A Three-Stage Framework for Automated High-Quality Chart Generation"
-#   authors:
-#     - family-names: "TODO"
-#       given-names: "TODO"
-#   journal: "TODO"
-#   year: 2025
-#   doi: "10.xxxx/xxxxx"
+preferred-citation:
+  type: paper-conference
+  title: "ChartGen-Agent: A Three-Stage Framework for Automated High-Quality Chart Generation"
+  authors:
+    - family-names: "Jiang"
+      given-names: "Rui"
+    - family-names: "Wu"
+      given-names: "Shenrong"
+    - family-names: "Wu"
+      given-names: "Zhehao"
+    - family-names: "Han"
+      given-names: "Zhenjie"
+    - family-names: "Zhong"
+      given-names: "Jiang"
+  collection-title: "Advanced Data Mining and Applications (ADMA 2025)"
+  collection-type: conference
+  volume: 16200
+  start: 19
+  end: 32
+  publisher:
+    name: "Springer"
+  year: 2025
+  doi: "10.1007/978-981-95-3462-3_2"

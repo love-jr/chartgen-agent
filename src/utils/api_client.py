@@ -9,24 +9,35 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 import json
 import subprocess
 def get_free_gpu():
-    # 获取所有 GPU 的显存使用情况
-    result = subprocess.run(['nvidia-smi', '--query-gpu=memory.free,memory.total', '--format=csv,nounits,noheader'], 
-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-    
-    # 解析输出结果
-    gpu_memory = result.stdout.strip().split('\n')
-    free_memory = []
-    for mem in gpu_memory:
-        free, total = map(int, mem.split(','))
-        free_memory.append(free)
-    
-    # 选择显存空闲最多的 GPU
-    free_gpu_id = free_memory.index(max(free_memory))
-    
-    return free_gpu_id
+    """返回显存最空闲的 GPU 序号；无 GPU 或取不到信息时返回 None。
 
-free_gpu = get_free_gpu()
-device = torch.device(f"cuda:{free_gpu}" if torch.cuda.is_available() else "cpu")
+    部分机器没有 nvidia-smi（CPU 机器、或未加入 PATH），此时不应中断导入。
+    """
+    try:
+        result = subprocess.run(
+            ['nvidia-smi', '--query-gpu=memory.free,memory.total',
+             '--format=csv,nounits,noheader'],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=10)
+    except Exception:
+        return None
+    lines = [ln for ln in result.stdout.strip().splitlines() if ln.strip()]
+    free_memory = []
+    for mem in lines:
+        parts = mem.split(',')
+        if len(parts) < 2:
+            continue
+        try:
+            free_memory.append(int(parts[0]))
+        except ValueError:
+            continue
+    if not free_memory:
+        return None
+    return free_memory.index(max(free_memory))
+
+
+_free_gpu = get_free_gpu()
+device = torch.device(
+    f"cuda:{_free_gpu}" if (torch.cuda.is_available() and _free_gpu is not None) else "cpu")
 class APIClient:
     """API客户端类"""
     def __init__(self, config):
@@ -97,32 +108,24 @@ class APIClient:
 
     def process_image_query(self, prompt: str, image_path: str, system_message: str = "") -> str:
         """处理图片相关的查询"""
-        # try:
-            # 编码图片
         base64_image = self.encode_image(image_path)
-            
-            # 构建消息
+
         messages = []
         if system_message:
             messages.append({"role": "system", "content": system_message})
-            
-        messages.append({
-                "role": "user",
-                "content": [
-                    {"type": "text", "text": prompt},
-                    {
-                        "type": "image_url",
-                        "image_url": {
-                            "url": f"data:image/png;base64,{base64_image}"
-                        }
-                    }
-                ]
-            })
 
-        return self.get_response(messages)   
-        # except Exception as e:
-        #     self.logger.error(f"图片处理失败: {str(e)}")
-        #     raise
+        messages.append({
+            "role": "user",
+            "content": [
+                {"type": "text", "text": prompt},
+                {
+                    "type": "image_url",
+                    "image_url": {"url": f"data:image/png;base64,{base64_image}"}
+                }
+            ]
+        })
+
+        return self.get_response(messages)
 
 
 

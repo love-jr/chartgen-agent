@@ -13,6 +13,7 @@ from src.code_withoutTemplate.code_executor import _sanitize_output_r
 from src.code_optimazation.eval_chart import eval_chart
 from config.list import chart_themes,chart_types,color_matchings,topics
 from src.utils.api_config import APIConfig
+from src.utils.output import output_dir
 from src.utils.api_config1 import APIConfig1
 from src.utils.api_client import APIClient, LocalModelClient
 from src.utils.api_config_deepseek import APIConfig_Deepseek, APIConfig_DL70B, APIConfig_DQ32B, APIConfig_DQ7B
@@ -197,7 +198,7 @@ def main():
         total_scores = [0] * 5
         c = clients[i]
         model_name = model_names[i]    
-        base_dir = '/data/yangyuming/projects/chart_generation/chart'
+        base_dir = output_dir("chart")
         model_dir = base_dir + "+" + model_name
         # 使用 ThreadPoolExecutor 进行并行化加速
         with ThreadPoolExecutor(max_workers=256) as executor:
@@ -255,7 +256,7 @@ def main():
     for model in []:    
        
         
-        base_dir = '/data/yangyuming/projects/chart_generation/chart'
+        base_dir = output_dir("chart")
         model_dir = base_dir + '+' + model    
     # 使用 ThreadPoolExecutor 进行并行化加速
         with ThreadPoolExecutor(max_workers=256) as executor:

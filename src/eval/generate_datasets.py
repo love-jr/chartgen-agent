@@ -17,6 +17,7 @@ from src.code_optimazation.eval_chart import eval_chart
 from src.code_optimazation.optimize_code import optimize_code
 from config.list import chart_themes,chart_types,color_matchings,topics,Single_broken_line,multiple_broken_lines,Single_broken_line_dotted,multiple_broken_lines_dotted,Single_Pie_Chart,simple_bar_chart,paired_bar_chart,simple_column_chart,paired_column_chart
 from src.utils.api_config import APIConfig
+from src.utils.output import output_dir
 from src.utils.api_config1 import APIConfig1
 from src.utils.api_client import APIClient, LocalModelClient
 from src.utils.api_config_deepseek import APIConfig_Deepseek
@@ -141,62 +142,6 @@ Total Score: {score}
 
     return [expression_score, aesthetic_score, readability_score, color_score, layout_score, score]
 
-def eval_chart():
-    # 获取图表的评估结果
-    chart_image_path = os.path.join(chart_folder, 'chart.png')
-    eval_response = eval_chart(client, chart_image_path)
-
-    # Ensure the eval_response is a valid JSON string without extra backticks or characters
-    eval_response = eval_response.strip()  # Strip any leading/trailing whitespaces
-    if eval_response.startswith("```json") and eval_response.endswith("```"):
-        eval_response = eval_response[7:-3].strip()  # Remove the ```json and closing ```
-
-    try:
-        # Parse the cleaned JSON response
-        data = json.loads(eval_response)
-        # score = data['score']
-        expression_score = float(data.get("Expression", 0))
-        aesthetic_score = float(data.get("Aesthetic", 0))
-        readability_score = float(data.get("Readability", 0))
-        color_score = float(data.get("Color", 0))
-        layout_score = float(data.get("Layout", 0))
-        suggestion = data['suggestion']
-        score = expression_score + aesthetic_score + readability_score + color_score + layout_score
-        # score = int(score)
-        score_text = f"""Expression Score: {expression_score}
-Aesthetic Score: {aesthetic_score}
-Readability Score: {readability_score}
-Color Score: {color_score}
-Layout Score: {layout_score}
-Total Score: {score}
-"""
-    except json.JSONDecodeError:
-        print(f"Error decoding JSON: {eval_response}")
-    except Exception as e:
-        print(f"An error occurred: {e}")
-
-    try:
-        if score < 8:
-            if os.path.exists(chart_folder):
-                shutil.rmtree(chart_folder)
-            print(f"图表评分为 {score},删除路径{chart_folder}")
-            print(f"图表评分为 {score}，需要优化。正在优化 temp_code.R...")
-            # 优化图表代码
-            code_path = os.path.join(chart_folder, 'temp_code.R')
-            optimized_code=optimize_code(client,chart_folder,suggestion)
-            _sanitize_output_r(optimized_code,chart_folder)
-            #print(optimized_code)
-        else:
-            with open("datasets_scores.txt", "a") as f:
-                f.write(f"DIR: {chart_folder}\n")
-                f.write(f"{score_text}\n")
-                f.write("=" * 30 + "\n")
-            print(f"图表评分为 {score}，无需优化。")
-    except Exception as e:
-        print(f"处理评估结果时出错: {e}")
-
-    return [expression_score, aesthetic_score, readability_score, color_score, layout_score, score]
-
 def main():
     """主程序"""
 
@@ -242,7 +187,7 @@ def main():
     for i in range(1,2):
         c = clients[i]
         model_name = model_names[i]    
-        base_dir = '/data/yangyuming/projects/chart_generation/chartWithTemplate'
+        base_dir = output_dir("chartWithTemplate")
         model_dir = base_dir + "+" + model_name
     # 使用 ThreadPoolExecutor 进行并行化加速
         futures = []

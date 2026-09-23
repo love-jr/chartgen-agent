@@ -27,9 +27,5 @@ def _sanitize_output_r(text: str, chart_folder: str):
         subprocess.run(["Rscript", temp_file_path], check=True)
         
     except Exception as e:
-        # 如果执行错误，删除生成的文件夹  /data/yangyuming/projects/chart_generation/chart
-        
-        # if os.path.exists(chart_folder):
-        #     shutil.rmtree(chart_folder)
         print(f"执行 R 代码时发生错误，文件夹 {chart_folder}")
         raise e

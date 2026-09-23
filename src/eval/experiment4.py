@@ -17,6 +17,7 @@ from src.code_optimazation.eval_chart import eval_chart
 from src.code_optimazation.optimize_code import optimize_code
 from config.list import chart_themes,chart_types,color_matchings,topics,Single_broken_line,multiple_broken_lines,Single_broken_line_dotted,multiple_broken_lines_dotted,Single_Pie_Chart,simple_bar_chart,paired_bar_chart,simple_column_chart,paired_column_chart
 from src.utils.api_config import APIConfig
+from src.utils.output import output_dir
 from src.utils.api_config1 import APIConfig1
 from src.utils.api_client import APIClient, LocalModelClient
 from src.utils.api_config_deepseek import APIConfig_Deepseek
@@ -143,7 +144,7 @@ if __name__ == "__main__":
     for i in range(0, 1):
         # c = clients[i]
         model_name = model_names[i]    
-        base_dir = '/data/yangyuming/projects/chart_generation/chartWithTemplate'
+        base_dir = output_dir("chartWithTemplate")
         model_dir = base_dir + "+" + model_name
 
         total_scores = {"Expression": [], "Aesthetic": [], "Readability": [], "Color": [], "Layout": [], "Total": []}

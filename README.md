@@ -47,6 +47,14 @@ install.packages(c("ggplot2", "ggrepel", "hrbrthemes", "bbplot",
 | `ARK_API_KEY` | 火山引擎方舟 | DeepSeek-V3、DouBao、GLM3 等 |
 | `QIANFAN_API_KEY` | 百度千帆 | ERNIE、QwQ-32B、DeepSeek-R1-Distill 系列 |
 
+**输出目录**
+
+生成的图表和数据默认写到项目根目录的 `output/` 下（已 gitignore）。如需改到别处，设置 `CHARTGEN_OUTPUT_DIR`：
+
+```bash
+export CHARTGEN_OUTPUT_DIR=/your/output/path
+```
+
 ## 运行
 
 ```bash
@@ -58,7 +66,17 @@ cd src/code_withoutTemplate && python main.py    # 不带模板
 cd src/eval && python experiment1.py
 ```
 
-生成脚本用 `ThreadPoolExecutor` 并发，默认迭代次数较高（如 3500）。首次试跑请先把 `num_iterations` 调小。
+生成脚本用 `ThreadPoolExecutor` 并发，默认迭代次数较高（带模板流程为 3500）。首次试跑请先把 `main.py` 里的 `NUM_ITERATIONS` 调小。
+
+辅助脚本：
+
+```bash
+python src/eval/count.py [目录]           # 统计输出目录下的子文件夹数
+python src/eval/delete.py <目录> --dry-run # 列出缺少 R/png/json 的目录
+python src/eval/chage_name.py <目录> --dry-run  # 按序重命名为 chart_0001…
+```
+
+> `delete.py` 与 `chage_name.py` 会改动文件系统，**务必先加 `--dry-run` 确认**。
 
 ## 目录结构
 

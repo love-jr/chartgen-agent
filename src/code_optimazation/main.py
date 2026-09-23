@@ -7,45 +7,8 @@
 # # 将项目根目录加入系统路径
 # sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 # from src.utils.api_config import APIConfig
+from src.utils.output import output_dir
 # from src.utils.api_client import APIClient
-
-# def optimazation(client,path):
-#     #这里需要chart的位置 
-#     eval_respose=eval_chart(client,path)
-#     print(eval_respose)
-
-    
-
-   
-
-# def main():
-#     """主程序"""
-
-#     config = APIConfig()
-#     client = APIClient(config)
-
-#     # 使用 ThreadPoolExecutor 进行并行化加速
-#     with ThreadPoolExecutor(max_workers=256) as executor:
-#         """
-#         分析/data/yangyuming/projects/chart_generation/chartWithTemplate 主文件夹下面所有子文件
-#         首先对chart进行打分评价,如果评分低于8分,则根据评价对temp.R的代码进行优化
-#         -chartWithTemplate
-#             -chart_0001
-#                 chart_info.json
-#                 chart.png
-#                 temp_code.R
-#             -chart_0002
-#                 chart_info.json
-#                 chart.png
-#                 temp_code.R 
-#             -chart_0003
-#                 chart_info.json
-#                 chart.png
-#                 temp_code.R 
-#         """
-
-# if __name__ == "__main__":
-#     main()
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import os
@@ -111,7 +74,7 @@ def main():
     client = APIClient(config)
 
     # 设置目标目录路径 
-    base_dir = '/data/yangyuming/projects/chart_generation/chartWithTemplate+gpt-4o'
+    base_dir = output_dir("chartWithTemplate+gpt-4o")
     # delete_subdirectories(base_dir)
     # 使用 ThreadPoolExecutor 进行并行化加速
     with ThreadPoolExecutor(max_workers=256) as executor:

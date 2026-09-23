@@ -130,7 +130,7 @@ if __name__ == "__main__":
     }
     for i in range(1,7):
         model_name = model_names[i]    
-        base_dir = '/data/yangyuming/projects/chart_generation/chartWithTemplate'
+        base_dir = output_dir("chartWithTemplate")
         model_dir = base_dir + "+" + model_name
 
         with ThreadPoolExecutor(max_workers=256) as executor:

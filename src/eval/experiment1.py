@@ -17,6 +17,7 @@ from src.code_optimazation.eval_chart import eval_chart
 from src.code_optimazation.optimize_code import optimize_code
 from config.list import chart_themes,chart_types,color_matchings,topics,Single_broken_line,multiple_broken_lines,Single_broken_line_dotted,multiple_broken_lines_dotted,Single_Pie_Chart,simple_bar_chart,paired_bar_chart,simple_column_chart,paired_column_chart
 from src.utils.api_config import APIConfig
+from src.utils.output import output_dir
 from src.utils.api_config1 import APIConfig1
 from src.utils.api_client import APIClient, LocalModelClient
 from src.utils.api_config_deepseek import APIConfig_Deepseek, APIConfig_DL70B, APIConfig_DQ32B, APIConfig_DQ7B, APIConfig_GLM3, APIConfig_MISTRAL7B, APIConfig_MOON
@@ -242,7 +243,7 @@ def main():
         total_scores = [0] * 5
         c = clients[i]
         model_name = model_names[i]    
-        base_dir = '/data/yangyuming/projects/chart_generation/chartWithTemplate'
+        base_dir = output_dir("chartWithTemplate")
         model_dir = base_dir + "+" + model_name
     # 使用 ThreadPoolExecutor 进行并行化加速
         futures = []
@@ -291,7 +292,7 @@ def main():
 
     # 顺序遍历每个模型对应的文件夹，处理图表数据
     for model in []:
-        base_dir = '/data/yangyuming/projects/chart_generation/chartWithTemplate'
+        base_dir = output_dir("chartWithTemplate")
         model_dir = base_dir + '+' + model
         # 遍历模型目录下的所有子文件夹
         futures = []

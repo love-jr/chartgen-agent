@@ -105,7 +105,7 @@ grouped_bars_20250306165454 <- ggplot(data, aes(x = Year, y = Interference_Cases
   ) + 
   bbc_style()
 
-finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Data is sourced from reports by international security agencies and cybersecurity academic research studies.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0005/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Data is sourced from reports by international security agencies and cybersecurity academic research studies.", save_filepath = '/path/to/output/chart/chart_0005/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -165,7 +165,7 @@ grouped_bars_20250306165454 <- ggplot(data, aes(x = Year, y = Support_Percentage
   ) +
   bbc_style()
 
-finalise_plot(plot_name = grouped_bars_20250306165454, source = "Source: Data sourced from Pew Research Center and Gallup Polls", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0006/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = grouped_bars_20250306165454, source = "Source: Data sourced from Pew Research Center and Gallup Polls", save_filepath = '/path/to/output/chart/chart_0006/chart.png', width_pixels = 896, height_pixels = 630)
 
 """,
 """
@@ -223,7 +223,7 @@ employment_trends_20250306165454 <- ggplot(data, aes(x=Year, y=Employment_Growth
   ) +
   bbc_style()
 
-finalise_plot(plot_name = employment_trends_20250306165454, source = "Sourse: Data is sourced from ILO and WEF reports on emerging technology employment trends.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0019/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = employment_trends_20250306165454, source = "Sourse: Data is sourced from ILO and WEF reports on emerging technology employment trends.", save_filepath = '/path/to/output/chart/chart_0019/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -297,7 +297,7 @@ broken_line_chart <- ggplot(data, aes(x = Generation, y = Ideal_Family_Size, gro
 
 finalise_plot(plot_name = broken_line_chart, 
               source = "Source: Based on surveys from sociological research institutions.", 
-              save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0021/chart.png', 
+              save_filepath = '/path/to/output/chart/chart_0021/chart.png', 
               width_pixels = 896, 
               height_pixels = 630)
 """,
@@ -357,7 +357,7 @@ broken_line_chart <- ggplot(data, aes(x = Year, y = Growth_Rate)) +
     theme_tufte() +
     bbc_style()
 
-finalise_plot(plot_name = broken_line_chart, source = "Source: Data sourced from World Bank and IMF economic reports, and government fiscal policy papers.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0030/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = broken_line_chart, source = "Source: Data sourced from World Bank and IMF economic reports, and government fiscal policy papers.", save_filepath = '/path/to/output/chart/chart_0030/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -412,7 +412,7 @@ line_chart_20250306165454 <- ggplot(data, aes(x = FamilyStructure, y = LifeExpec
   theme_excel() +
   bbc_style()
 
-finalise_plot(plot_name = line_chart_20250306165454, source = "Sourse: Estimated data based on studies from Population Reference Bureau and health surveys.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0036/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = line_chart_20250306165454, source = "Sourse: Estimated data based on studies from Population Reference Bureau and health surveys.", save_filepath = '/path/to/output/chart/chart_0036/chart.png', width_pixels = 896, height_pixels = 630)
 """
 ]
 
@@ -482,7 +482,7 @@ engagement_trends <- ggplot(data_long, aes(x = Year, y = Engagement, color = Pla
   ) +
   bbc_style()
 
-finalise_plot(plot_name = engagement_trends, source = "Source: Data sourced from platform analytics reports and market research.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0001/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = engagement_trends, source = "Source: Data sourced from platform analytics reports and market research.", save_filepath = '/path/to/output/chart/chart_0001/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -554,7 +554,7 @@ plot <- ggplot(data, aes(x = Year, y = Business_Growth_Index, color = Region, gr
   theme_gdocs() +
   bbc_style()
 
-finalise_plot(plot_name = plot, source = "Source: Data is sourced from government tax publications and economic reports.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0004/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = plot, source = "Source: Data is sourced from government tax publications and economic reports.", save_filepath = '/path/to/output/chart/chart_0004/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -648,7 +648,7 @@ grouped_bars_20250306165454 <- ggplot(data_long, aes(x = Year, y = Impact, color
   ) + 
   bbc_style()
 
-finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Derived from public health reports, academic studies, and governmental policy reviews.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0010/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Derived from public health reports, academic studies, and governmental policy reviews.", save_filepath = '/path/to/output/chart/chart_0010/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -717,7 +717,7 @@ trend_line_plot <- ggplot(data_long, aes(x = Year, y = RemoteWorkPercentage, col
   guides(color = guide_legend(override.aes = list(size = 8), nrow = 1, byrow = TRUE)) +
   bbc_style()
 
-finalise_plot(plot_name = trend_line_plot, source = "Source: Data sourced from industry surveys by leading consulting firms and tech research companies.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0011/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = trend_line_plot, source = "Source: Data sourced from industry surveys by leading consulting firms and tech research companies.", save_filepath = '/path/to/output/chart/chart_0011/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -782,7 +782,7 @@ line_chart <- ggplot(data_long, aes(x = Year, y = Count, color = Religion)) +
   theme_wsj() +
   bbc_style()
 
-finalise_plot(plot_name = line_chart, source = "Sourse: Data compiled from government crime reports, human rights organizations, and academic research studies.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0016/chart.png', width_pixels = 950, height_pixels = 630)
+finalise_plot(plot_name = line_chart, source = "Sourse: Data compiled from government crime reports, human rights organizations, and academic research studies.", save_filepath = '/path/to/output/chart/chart_0016/chart.png', width_pixels = 950, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -963,7 +963,7 @@ grouped_bars_20250306165454 <- (awareness_plot / opinion_plot / misinformation_p
     )
   ) + theme_economist() + bbc_style()
 
-finalise_plot(plot_name = grouped_bars_20250306165454, source = "Source: Data sourced from media reports, social media analytics, and academic research studies.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0031/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = grouped_bars_20250306165454, source = "Source: Data sourced from media reports, social media analytics, and academic research studies.", save_filepath = '/path/to/output/chart/chart_0031/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -1033,7 +1033,7 @@ line_plot <- ggplot(data_long, aes(x = Year, y = Participation, color = Religion
   ) +
   bbc_style()
 
-finalise_plot(plot_name = line_plot, source = "Sourse: Data is sourced from the Pew Research Center and the World Values Survey reports.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0032/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = line_plot, source = "Sourse: Data is sourced from the Pew Research Center and the World Values Survey reports.", save_filepath = '/path/to/output/chart/chart_0032/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -1105,7 +1105,7 @@ line_chart <- ggplot(data_long, aes(x = Year, y = Index, color = Organization, g
   theme_calc() +
   bbc_style()
 
-finalise_plot(plot_name = line_chart, source = "Source: Data sourced from international security organizations' annual reports and conflict monitoring databases.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0043/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = line_chart, source = "Source: Data sourced from international security organizations' annual reports and conflict monitoring databases.", save_filepath = '/path/to/output/chart/chart_0043/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -1179,7 +1179,7 @@ dynamic_lines <- ggplot(data_long, aes(x = Month, y = OpinionScore, color = Cate
   theme_stata() + 
   bbc_style()
 
-finalise_plot(plot_name = dynamic_lines, source = "Sourse: Based on surveys and sentiment analysis from media impact research firms.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0046/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = dynamic_lines, source = "Sourse: Based on surveys and sentiment analysis from media impact research firms.", save_filepath = '/path/to/output/chart/chart_0046/chart.png', width_pixels = 896, height_pixels = 630)
 """
 ]
 
@@ -1240,7 +1240,7 @@ broken_line_chart <- ggplot(data, aes(x = Age.Group, y = Hours.Per.Day)) +
   theme_gdocs() +
   bbc_style()
 
-finalise_plot(plot_name = broken_line_chart, source = "Sourse: Data sourced from Pew Research Center and Nielsen surveys.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0015/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = broken_line_chart, source = "Sourse: Data sourced from Pew Research Center and Nielsen surveys.", save_filepath = '/path/to/output/chart/chart_0015/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -1292,7 +1292,7 @@ consumption_trend <- ggplot(data, aes(x = Year, y = Worldwide_Listeners_millions
   ) +
   bbc_style()
 
-finalise_plot(plot_name = consumption_trend, source = "Source: Data sourced from Edison Research and the Podcast Consumer Tracking Report.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0020/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = consumption_trend, source = "Source: Data sourced from Edison Research and the Podcast Consumer Tracking Report.", save_filepath = '/path/to/output/chart/chart_0020/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -1348,7 +1348,7 @@ collaboration_trend <- ggplot(data, aes(x = Year, y = Projects)) +
   ) + 
   bbc_style()
 
-finalise_plot(plot_name = collaboration_trend, source = "Sourse: Data is sourced from UNESCO Science Report, Scopus, and international research institution reports.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0041/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = collaboration_trend, source = "Sourse: Data is sourced from UNESCO Science Report, Scopus, and international research institution reports.", save_filepath = '/path/to/output/chart/chart_0041/chart.png', width_pixels = 896, height_pixels = 630)
 """
 ]
 
@@ -1467,7 +1467,7 @@ immigration_plot <- ggplot(data, aes(x = Year)) +
 # Save the final plot
 finalise_plot(plot_name = immigration_plot, 
               source = "Sourse: Data is assumed to be sourced from government census reports, urban development agencies, and migration studies.", 
-              save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0006/chart.png', 
+              save_filepath = '/path/to/output/chart/chart_0006/chart.png', 
               width_pixels = 896, 
               height_pixels = 630)
 """,
@@ -1550,7 +1550,7 @@ broken_lines <- ggplot(data, aes(x = Year)) +
 
 finalise_plot(plot_name = broken_lines, 
               source = "Source: Data derived from Global Internet NGOs, GDPR Audits, and National Cybersecurity Agencies Reports.", 
-              save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0007/chart.png', 
+              save_filepath = '/path/to/output/chart/chart_0007/chart.png', 
               width_pixels = 896, 
               height_pixels = 630)
 """,
@@ -1628,7 +1628,7 @@ p <- ggplot(data_melt, aes(x = Year, y = Value, color = Trade_Relation, group = 
   ) +
   bbc_style()
 
-finalise_plot(plot_name = p, source = "Source: Data is sourced from WTO and OECD trade reports, along with data from national trade departments.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0037/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = p, source = "Source: Data is sourced from WTO and OECD trade reports, along with data from national trade departments.", save_filepath = '/path/to/output/chart/chart_0037/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -1694,7 +1694,7 @@ broken_lines <- ggplot(data, aes(x = Year, y = GDP_Growth, color = Country, line
   theme_solarized() +
   bbc_style()
 
-finalise_plot(plot_name = broken_lines, source = "Source: Data is derived from World Bank and OECD reports.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0039/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = broken_lines, source = "Source: Data is derived from World Bank and OECD reports.", save_filepath = '/path/to/output/chart/chart_0039/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -1770,7 +1770,7 @@ blockchain_plot <- ggplot(data, aes(x = Year)) +
   theme_stata() +
   bbc_style()
 
-finalise_plot(plot_name = blockchain_plot, source = "Sourse: Data sourced from Gartner, PwC technology reports, and digital media industry panels.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0047/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = blockchain_plot, source = "Sourse: Data sourced from Gartner, PwC technology reports, and digital media industry panels.", save_filepath = '/path/to/output/chart/chart_0047/chart.png', width_pixels = 896, height_pixels = 630)
 """
 ]
 
@@ -1815,7 +1815,7 @@ grouped_donut <- ggplot(data, aes(x = 2, y = Proportion, fill = Entity)) +
 # 保存图表
 finalise_plot(plot_name = grouped_donut, 
               source = "Source: Data from United Nations databases and international relations research reports.", 
-              save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0011/chart.png', 
+              save_filepath = '/path/to/output/chart/chart_0011/chart.png', 
               width_pixels = 800, 
               height_pixels = 630)""",
 """
@@ -1869,7 +1869,7 @@ grouped_bars <- ggplot(data, aes(x = "", y = Proportion, fill = Entity)) +
 # 保存图表
 finalise_plot(plot_name = grouped_bars, 
               source = "Source: Data from United Nations databases and international relations research reports.", 
-              save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0012/chart.png', 
+              save_filepath = '/path/to/output/chart/chart_0012/chart.png', 
               width_pixels = 800, 
               height_pixels = 630)
 """
@@ -1949,7 +1949,7 @@ grouped_bars_20250306165454 <- ggplot(data, aes(x = Economic_Resilience_Score, y
   theme_calc()+
   bbc_style()
 
-finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Data sourced from OECD diversity indices and WEF economic resilience reports.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0008/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Data sourced from OECD diversity indices and WEF economic resilience reports.", save_filepath = '/path/to/output/chart/chart_0008/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -2005,7 +2005,7 @@ grouped_bars_20250306165454 <- ggplot(data, aes(x = Impact_Percentage, y = reord
   theme_calc()+
   bbc_style()
 
-finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Data based on surveys from Reuters Institute and news organizations", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0019/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Data based on surveys from Reuters Institute and news organizations", save_filepath = '/path/to/output/chart/chart_0019/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -2055,7 +2055,7 @@ grouped_bars <- ggplot(data, aes(x = Percentage, y = reorder(Impact_Factor, Perc
   theme_solarized() +
   bbc_style()
 
-finalise_plot(plot_name = grouped_bars, source = "Sourse: Data collected from platform reports, industry surveys, and studies by advocacy groups.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0027/chart.png', width_pixels = 1000, height_pixels = 630)
+finalise_plot(plot_name = grouped_bars, source = "Sourse: Data collected from platform reports, industry surveys, and studies by advocacy groups.", save_filepath = '/path/to/output/chart/chart_0027/chart.png', width_pixels = 1000, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -2109,7 +2109,7 @@ grouped_bars_20250306165454 <- ggplot(data, aes(x = Youth_Participation_Percenta
 
 finalise_plot(plot_name = grouped_bars_20250306165454, 
               source = "Sourse: Data is derived from Pew Research Center surveys and religious community reports.", 
-              save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0030/chart.png', 
+              save_filepath = '/path/to/output/chart/chart_0030/chart.png', 
               width_pixels = 896, height_pixels = 630)
 """,
 """
@@ -2176,7 +2176,7 @@ grouped_bars_20250306165454 <- ggplot(data, aes(x = reorder(Education_Level, Wag
 
 finalise_plot(plot_name = grouped_bars_20250306165454, 
               source = "Sourse: Data compiled from labor statistics reports and economic research publications.", 
-              save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0034/chart.png', 
+              save_filepath = '/path/to/output/chart/chart_0034/chart.png', 
               width_pixels = 896, 
               height_pixels = 630)
 """
@@ -2230,7 +2230,7 @@ grouped_bars_20250306165454 <- ggplot(data_long, aes(x = AgeGroup, y = Count, fi
   theme_gdocs() +
   bbc_style()
 
-finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Data sourced from national social service reports and family caregiving studies.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0001/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Data sourced from national social service reports and family caregiving studies.", save_filepath = '/path/to/output/chart/chart_0001/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -2295,7 +2295,7 @@ grouped_bars_20250306165454 <- ggplot(data_long, aes(x = Year, y = value, fill =
   theme_calc() + 
   bbc_style()
 
-finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Data is compiled from PsycINFO, PubMed, and various meta-analyses on psychology research.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0007/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Data is compiled from PsycINFO, PubMed, and various meta-analyses on psychology research.", save_filepath = '/path/to/output/chart/chart_0007/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -2357,7 +2357,7 @@ grouped_bars_20250306165454 <- ggplot(data_melt, aes(x = Percentage, y = Region,
 
 finalise_plot(plot_name = grouped_bars_20250306165454, 
               source = "Sourse: Data is sourced from national statistics bureaus and UNDESA reports.", 
-              save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0016/chart.png', 
+              save_filepath = '/path/to/output/chart/chart_0016/chart.png', 
               width_pixels = 896, 
               height_pixels = 630)
 """,
@@ -2443,7 +2443,7 @@ grouped_bars <- ggplot() +
   ) +
   bbc_style()
 
-finalise_plot(plot_name = grouped_bars, source = "Sourse: Data sourced from media analysis reports by media watch organizations and academic studies.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0021/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = grouped_bars, source = "Sourse: Data sourced from media analysis reports by media watch organizations and academic studies.", save_filepath = '/path/to/output/chart/chart_0021/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -2511,7 +2511,7 @@ grouped_bars <- ggplot(data_long, aes(x = Region, y = value, fill = variable)) +
   theme_gdocs() +
   bbc_style()
 
-finalise_plot(plot_name = grouped_bars, source = "Sourse: Data derived from IUCN, WWF, and environmental studies journals.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0047/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = grouped_bars, source = "Sourse: Data derived from IUCN, WWF, and environmental studies journals.", save_filepath = '/path/to/output/chart/chart_0047/chart.png', width_pixels = 896, height_pixels = 630)
 """
 ]
 simple_column_chart = [
@@ -2569,7 +2569,7 @@ grouped_bars_20250306165454 <- ggplot(data, aes(x = Generation, y = AverageFamil
 
 finalise_plot(plot_name = grouped_bars_20250306165454, 
               source = "Sourse: Data is sourced from national census data and research surveys by demographic institutions.", 
-              save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0009/chart.png', 
+              save_filepath = '/path/to/output/chart/chart_0009/chart.png', 
               width_pixels = 896, 
               height_pixels = 630)
 """,
@@ -2625,7 +2625,7 @@ grouped_bars_20250306165454 <- ggplot(data, aes(x = AgeGroup, y = Percentage, fi
   theme_wsj() +
   bbc_style()
 
-finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Data sourced from national statistics and demographic studies on family structures.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0027/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Data sourced from national statistics and demographic studies on family structures.", save_filepath = '/path/to/output/chart/chart_0027/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -2685,7 +2685,7 @@ grouped_bars_20250306165454 <- ggplot(data, aes(x = AgeGroup, y = PetOwnershipRa
   theme_hc() +
   bbc_style()
 
-finalise_plot(plot_name = grouped_bars_20250306165454, source = "Source: Data is sourced from surveys by the Pet Food Manufacturers' Association and demographic research studies.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0038/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = grouped_bars_20250306165454, source = "Source: Data is sourced from surveys by the Pet Food Manufacturers' Association and demographic research studies.", save_filepath = '/path/to/output/chart/chart_0038/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -2744,7 +2744,7 @@ grouped_bars_20250306165454 <- ggplot(data, aes(x = AgeGroup, y = Count, fill = 
   theme_excel() + 
   bbc_style()
 
-finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Data sourced from national statistics agencies and family demographic studies.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0039/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Data sourced from national statistics agencies and family demographic studies.", save_filepath = '/path/to/output/chart/chart_0039/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -2809,7 +2809,7 @@ grouped_bars_20250306165454 <- ggplot(data, aes(x = Age.Group, y = Mobility.Rate
   ) +
   bbc_style()
 
-finalise_plot(plot_name = grouped_bars_20250306165454, source = "Source: Data is sourced from census bureau studies and national statistical agencies.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0041/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = grouped_bars_20250306165454, source = "Source: Data is sourced from census bureau studies and national statistical agencies.", save_filepath = '/path/to/output/chart/chart_0041/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -2870,7 +2870,7 @@ grouped_bars_20250306165454 <- ggplot(data, aes(x = Age.Group, y = Childcare.Cos
   theme_solarized() + 
   bbc_style()
 
-finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Data sourced from national childcare reports and income distribution studies", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0045/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Data sourced from national childcare reports and income distribution studies", save_filepath = '/path/to/output/chart/chart_0045/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -2930,7 +2930,7 @@ grouped_bars_20250306165454 <- ggplot(data, aes(x = factor(Year), y = Responses,
   theme_excel() + 
   bbc_style()
 
-finalise_plot(plot_name = grouped_bars_20250306165454, source = "Source: Data compiled from UNOCHA annual reports, International Red Cross statistics, and national aid agencies.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0049/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = grouped_bars_20250306165454, source = "Source: Data compiled from UNOCHA annual reports, International Red Cross statistics, and national aid agencies.", save_filepath = '/path/to/output/chart/chart_0049/chart.png', width_pixels = 896, height_pixels = 630)
 """
 ]
 paired_column_chart = [
@@ -2995,7 +2995,7 @@ grouped_bars_20250306165454 <- ggplot(data_long, aes(x = factor(Year), y = Trade
   theme_wsj() + 
   bbc_style()
 
-finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Data is sourced from WTO Annual Reports, World Bank trade reports, and international trade ministry publications.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0001/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Data is sourced from WTO Annual Reports, World Bank trade reports, and international trade ministry publications.", save_filepath = '/path/to/output/chart/chart_0001/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -3067,7 +3067,7 @@ grouped_bars_20250306165454 <- ggplot(data_long, aes(x = Country, y = Effectiven
   theme_fivethirtyeight() +
   bbc_style()
 
-finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Data is sourced from UNODC and Global Terrorism Database reports.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0007/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Data is sourced from UNODC and Global Terrorism Database reports.", save_filepath = '/path/to/output/chart/chart_0007/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -3130,7 +3130,7 @@ grouped_bars_20250306165454 <- ggplot(data_long, aes(x = factor(Year), y = Count
   theme_hc() + 
   bbc_style()
 
-finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Data sourced from government crime statistics reports and international human rights databases.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0021/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Data sourced from government crime statistics reports and international human rights databases.", save_filepath = '/path/to/output/chart/chart_0021/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -3199,7 +3199,7 @@ grouped_bars_20250306165454 <- ggplot(data_melted, aes(x = AgeGroup, y = Divorce
   theme_tufte() + 
   bbc_style()
 
-finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Data is sourced from National Statistical Office and Family Studies Institute reports.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0028/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = grouped_bars_20250306165454, source = "Sourse: Data is sourced from National Statistical Office and Family Studies Institute reports.", save_filepath = '/path/to/output/chart/chart_0028/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -3279,7 +3279,7 @@ grouped_bars <- ggplot(data=data_long, aes(x=Country, y=Pension, fill=Period)) +
   theme_solarized() +
   bbc_style()
 
-finalise_plot(plot_name = grouped_bars, source = "Sourse: World Bank, OECD, and national statistics offices", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0030/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = grouped_bars, source = "Sourse: World Bank, OECD, and national statistics offices", save_filepath = '/path/to/output/chart/chart_0030/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -3357,7 +3357,7 @@ grouped_bars_20250306165454 <- ggplot(data_long, aes(x = Voting_System, y = Valu
 
 finalise_plot(plot_name = grouped_bars_20250306165454, 
               source = "Sourse: Derived from electoral studies and political science publications.", 
-              save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0035/chart.png', 
+              save_filepath = '/path/to/output/chart/chart_0035/chart.png', 
               width_pixels = 896, 
               height_pixels = 630)
 """,
@@ -3431,7 +3431,7 @@ grouped_bars_20250306165454 <- ggplot(data_long, aes(x = Age_Group, y = Percenta
 
 finalise_plot(plot_name = grouped_bars_20250306165454, 
               source = "Sourse: Survey data from Family Travel Studies and Travel Association Reports", 
-              save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0045/chart.png', 
+              save_filepath = '/path/to/output/chart/chart_0045/chart.png', 
               width_pixels = 896, 
               height_pixels = 630)
 """,
@@ -3501,7 +3501,7 @@ grouped_bars <- ggplot(data_long, aes(x = Department, y = Productivity, fill = S
   theme_gdocs() + 
   bbc_style()
 
-finalise_plot(plot_name = grouped_bars, source = "Sourse: Data is derived from internal HR reports and wellness assessments.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0046/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = grouped_bars, source = "Sourse: Data is derived from internal HR reports and wellness assessments.", save_filepath = '/path/to/output/chart/chart_0046/chart.png', width_pixels = 896, height_pixels = 630)
 """,
 """
 library(ggplot2)
@@ -3574,7 +3574,7 @@ grouped_bars <- ggplot(data_long, aes(x = Age_Group, y = value, fill = variable)
     theme_wsj() +
     bbc_style()
 
-finalise_plot(plot_name = grouped_bars, source = "Sourse: Data derived from demographic and health surveys.", save_filepath = '/data/yangyuming/projects/chart_generation/chart/chart_0048/chart.png', width_pixels = 896, height_pixels = 630)
+finalise_plot(plot_name = grouped_bars, source = "Sourse: Data derived from demographic and health surveys.", save_filepath = '/path/to/output/chart/chart_0048/chart.png', width_pixels = 896, height_pixels = 630)
 """
 ]
 

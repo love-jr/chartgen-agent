@@ -14,6 +14,7 @@ env/
 .pytest_cache/
 
 # 运行产物
+output/
 *.log
 Rplots.pdf
 temp_code.R

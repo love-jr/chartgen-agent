@@ -2,11 +2,10 @@ import re
 import os
 import shutil
 import subprocess
+import sys
 
-import re
-import os
-import shutil
-import subprocess
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
+from src.utils.output import output_dir
 
 def _auto_fix_r_code(code: str) -> str:
     """
@@ -58,49 +57,16 @@ def _sanitize_output_r(text: str, index: int, model_name: str):
 
     code_to_execute = _auto_fix_r_code(code_to_execute)
 
+    chart_subfolder_path = output_dir(f"chartWithTemplate+{model_name}", f"chart_{index:04d}")
     try:
-        temp_file_path = f'/data/yangyuming/projects/chart_generation/chartWithTemplate+{model_name}/chart_{index:04d}/temp_code.R'
-        os.makedirs(os.path.dirname(temp_file_path), exist_ok=True)
+        temp_file_path = os.path.join(chart_subfolder_path, 'temp_code.R')
         with open(temp_file_path, 'w', encoding='utf-8') as f:
             f.write(code_to_execute)
 
         subprocess.run(["Rscript", temp_file_path], check=True)
 
     except Exception as e:
-        chart_subfolder_path = f'/data/yangyuming/projects/chart_generation/chartWithTemplate+{model_name}/chart_{index:04d}'
         if os.path.exists(chart_subfolder_path):
             shutil.rmtree(chart_subfolder_path)
         print(f"执行 R 代码时发生错误，已删除数据文件夹 {index:04d}")
         raise e
-
-# def _sanitize_output_r(text: str, index: int):
-#     """
-#     提取并执行生成的 R 代码块（使用 subprocess 调用 Rscript）。
-#     """
-#     # 1. 提取 R 代码块
-#     code_blocks = re.findall(r'```r\s*(.*?)```', text, re.M | re.S)
-    
-#     if not code_blocks:
-#         # 如果没有找到 R 代码块，就把整个 text 当作 R 代码
-#         code_to_execute = text
-#     else:
-#         # 如果找到多个，只执行第一个
-#         code_to_execute = code_blocks[0]
-    
-#     try:
-#         # 2. 写入临时文件  
-#         temp_file_path = f'/data/yangyuming/projects/chart_generation/chartWithTemplate/chart_{index:04d}/temp_code.R'
-#         os.makedirs(os.path.dirname(temp_file_path), exist_ok=True)
-#         with open(temp_file_path, 'w', encoding='utf-8') as f:
-#             f.write(code_to_execute)
-        
-#         # 3. 用 Rscript 执行
-#         subprocess.run(["Rscript", temp_file_path], check=True)
-        
-#     except Exception as e:
-#         # 如果执行错误，删除生成的文件夹  /data/yangyuming/projects/chart_generation/chart
-#         chart_subfolder_path = f'/data/yangyuming/projects/chart_generation/chartWithTemplate/chart_{index:04d}'
-#         if os.path.exists(chart_subfolder_path):
-#             shutil.rmtree(chart_subfolder_path)
-#         print(f"执行 R 代码时发生错误，已删除数据文件夹 {index:04d}")
-#         raise e

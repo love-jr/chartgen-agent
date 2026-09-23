@@ -1,6 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import json
-import sys
 from typing import Type
 import os
 
@@ -32,7 +31,6 @@ def eval_chart(client: Type[APIClient], image_path: str) -> str:
     return client.process_image_query(prompt, image_path)
     # except Exception:
     #     return "生成文本失败，请稍后再试。"
-
 
 def process_image(client: Type[APIClient], chart_folder) -> str:
     chart_image_path = os.path.join(chart_folder, "chart.png")
@@ -108,8 +106,6 @@ def process_image(client: Type[APIClient], chart_folder) -> str:
         "Layout": layout_score,
         "Total": score,
     }, optimized_scores
-
-
 
 if __name__ == "__main__":
     config = APIConfig_DouBao()

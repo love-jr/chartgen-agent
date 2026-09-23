@@ -1,6 +1,5 @@
 import re
 import os
-import shutil
 import subprocess
 
 def _sanitize_output_r(text: str, chart_folder: str):

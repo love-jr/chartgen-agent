@@ -7,7 +7,6 @@ import httpx
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import json
-import subprocess
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 class APIClient:
@@ -106,9 +105,6 @@ class APIClient:
         # except Exception as e:
         #     self.logger.error(f"图片处理失败: {str(e)}")
         #     raise
-
-
-
 
 class LocalModelClient:
     def __init__(self, model_dir: str, max_tokens: int = 10240, temperature: float = 0.7):

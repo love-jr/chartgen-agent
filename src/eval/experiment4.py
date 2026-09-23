@@ -1,10 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import os
-import random
 import json
 import sys
-import subprocess
-import threading
 
 import numpy as np
 
@@ -27,8 +24,6 @@ from src.utils.api_config_doubao import APIConfig_DouBao
 from src.utils.api_config_qwq32b import APIConfig_QWQ32B
 from src.utils.api_config_ernie import APIConfig_ERNIE
 from src.eval.count import count_subdirectories
-
-
 
 def process_chart(client, chart_folder, model_name):
     """处理每个图表文件夹，进行评估和优化"""
@@ -145,8 +140,6 @@ if __name__ == "__main__":
     total_scores = [] 
     num_folders = 0
 
-
-
     for i in range(0, 1):
         # c = clients[i]
         model_name = model_names[i]    
@@ -162,7 +155,6 @@ if __name__ == "__main__":
                 folder_path = os.path.join(model_dir, folder)
                 if os.path.isdir(folder_path):
                     futures[executor.submit(process_chart, client_doubao, folder_path, model_name)] = folder_path
-
 
             for future in as_completed(futures):
                 try:

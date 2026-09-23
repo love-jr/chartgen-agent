@@ -9,8 +9,6 @@
 # from src.utils.api_config import APIConfig
 # from src.utils.api_client import APIClient
 
-
-
 # def optimazation(client,path):
 #     #这里需要chart的位置 
 #     eval_respose=eval_chart(client,path)
@@ -46,20 +44,14 @@
 #                 temp_code.R 
 #         """
 
-
 # if __name__ == "__main__":
 #     main()
 
-
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import os
-import random
 import json
-import shutil
 import sys
 from eval_chart import eval_chart
-from optimize_code import optimize_code
-from code_executor import _sanitize_output_r
 # 将项目根目录加入系统路径
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 from src.utils.api_config import APIConfig

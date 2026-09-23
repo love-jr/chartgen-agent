@@ -4,7 +4,6 @@ import random
 import json
 import shutil
 import sys
-import subprocess
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
@@ -48,10 +47,8 @@ def select_chart_list(chart_topic):
     else:
         return None
 
-
 # 指定每个图表类型的选取概率（权重）
 weights = [0.1, 0.15, 0.1, 0.15, 0.04, 0.1, 0.13, 0.1, 0.13]
-
 
 def generate_and_process(client,i,model_name):
     topic=random.choice(topics)
@@ -286,7 +283,6 @@ def main():
         print(f"Score: {avg_scores}, Success Rate: {suc:.2f}")
         print(f"score:{avg_scores}")
         print(f"suc:{num_folders}")
-
 
 if __name__ == "__main__":
     main()

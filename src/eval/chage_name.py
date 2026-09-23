@@ -1,7 +1,4 @@
 import os
-import shutil 
-
-
 
 def change_subdirectories(parent_folder):
     try:
@@ -18,6 +15,5 @@ def change_subdirectories(parent_folder):
                 os.rename(old_path, new_path)
     except Exception as e:
         print(f"发生错误: {e}")
-
 
 change_subdirectories('/data/yangyuming/projects/chart_generation/chartWithTemplate')

@@ -1,7 +1,4 @@
-from concurrent.futures import ThreadPoolExecutor, as_completed
 import os
-import random
-import json
 import sys
 
 from eval_chart import eval_chart
@@ -13,10 +10,6 @@ from src.utils.api_config import APIConfig
 from src.utils.api_config_doubao import APIConfig_DouBao
 
 from src.utils.api_client import APIClient
-
-
-
-
 
 def main():
     """主程序"""

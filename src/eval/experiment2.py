@@ -1,10 +1,7 @@
-from concurrent.futures import ThreadPoolExecutor, as_completed
 import os
 from pathlib import Path
-import random
 import json
 import sys
-import subprocess
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
@@ -22,8 +19,6 @@ from src.utils.api_config1 import APIConfig1
 from src.utils.api_client import APIClient, LocalModelClient
 from src.utils.api_config_deepseek import APIConfig_Deepseek
 from src.eval.count import count_subdirectories
-
-
 
 def process_chart(client, chart_folder):
     """处理每个图表文件夹，进行评估和优化"""
@@ -70,7 +65,6 @@ def process_chart(client, chart_folder):
     #     print(f"处理评估结果时出错: {e}")
 
     return [expression_score, aesthetic_score, readability_score, color_score, layout_score, score]
-
 
 def main():
     """主程序"""

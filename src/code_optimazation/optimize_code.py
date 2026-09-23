@@ -4,15 +4,12 @@ import re
 import sys
 from typing import Type
 import os
-import json
 
 # 将项目根目录加入系统路径
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 from src.utils.api_client import APIClient
 
 from src.code_optimazation.prompt_loader import load_prompt
-
-
 
 def optimize_code(client: Type[APIClient],  chart_folder : str , suggestion:str) -> str:
     """根据主题和图表类型生成数据"""
@@ -35,7 +32,6 @@ def optimize_code(client: Type[APIClient],  chart_folder : str , suggestion:str)
     except Exception:
         return "生成文本失败，请稍后再试。"
 
-
 def _replace_output_file_path(generated_code: str, new_path: str) -> str:
     """替换代码中的 output_file 路径"""
     # 正则表达式匹配 output_file 后面的路径，确保它是一个路径字符串
@@ -47,5 +43,4 @@ def _replace_output_file_path(generated_code: str, new_path: str) -> str:
     generated_code = re.sub(output_file_pattern, new_output_path, generated_code)
 
     return generated_code
-
 

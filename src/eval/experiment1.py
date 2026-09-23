@@ -4,7 +4,6 @@ import random
 import json
 import re
 import sys
-import subprocess
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
@@ -51,10 +50,8 @@ def select_chart_list(chart_topic):
     else:
         return None
 
-
 # 指定每个图表类型的选取概率（权重）
 weights = [0.1, 0.15, 0.1, 0.1, 0.05, 0.2, 0.1, 0.1, 0.1]  
-
 
 def generate_and_process(client,i,model_name):
     topic=random.choice(topics)
@@ -186,8 +183,6 @@ def generate_and_process_local_model(local_client, i, model_name):
     #     _sanitize_output_r(generated_code, i, model_name)
     # except subprocess.CalledProcessError as e:
     #     print(f"Error executing R code for model {model_name}, iteration {i}: {e}")
-
-
 
 def main():
     """主程序"""

@@ -1,4 +1,3 @@
-import os
 from typing import Dict
 
 from ._env import env_key, load_dotenv

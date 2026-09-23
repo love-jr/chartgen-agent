@@ -7,7 +7,8 @@
 1. 读环境变量 ``CHARTGEN_OUTPUT_DIR``（推荐）；
 2. 未设置时用项目根目录下的 ``output/``。
 
-各生成脚本通过 ``output_dir()`` 取根目录，再自行拼子目录名。
+``output_dir()`` 用于目录（会创建），``output_path()`` 用于文件（不创建）；
+两者不可混用，否则 ``chart.png`` 会被建成同名目录。
 """
 import os
 
@@ -18,13 +19,21 @@ DEFAULT_OUTPUT_DIR = os.path.join(PROJECT_ROOT, "output")
 ENV_VAR = "CHARTGEN_OUTPUT_DIR"
 
 
-def output_dir(*parts):
-    """返回输出根目录（可附带子路径），并确保目录存在。
+def output_path(*parts):
+    """返回输出根目录下的路径，不创建任何目录。
 
-    >>> output_dir()                       # .../chartgen-agent/output
-    >>> output_dir("chartWithTemplate+gpt-4o", "chart_0001")
+    >>> output_path("chart+gpt-4o", "chart_0001", "chart.png")
     """
     root = os.environ.get(ENV_VAR) or DEFAULT_OUTPUT_DIR
-    path = os.path.join(root, *parts) if parts else root
+    return os.path.join(root, *parts) if parts else root
+
+
+def output_dir(*parts):
+    """返回输出子目录并确保其存在。
+
+    >>> output_dir()                       # .../chartgen-agent/output
+    >>> output_dir("chart+gpt-4o", "chart_0001")
+    """
+    path = output_path(*parts)
     os.makedirs(path, exist_ok=True)
     return path

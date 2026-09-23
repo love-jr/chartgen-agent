@@ -19,3 +19,6 @@ output/
 Rplots.pdf
 temp_code.R
 new_temp_code.R
+# 实验运行时会就地追加/覆写这些文件，属于本地产物
+src/eval/datasets_scores.txt
+src/eval/ex4/scores.json

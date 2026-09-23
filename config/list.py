@@ -1,3 +1,13 @@
+"""图表类型、参考模板、主题、配色与选题集合。
+
+- ``chart_types``：9 种图表类型，阶段 ② 按权重随机选取。
+- ``Single_broken_line`` 等：各类型的 R/ggplot2 参考模板（带模板路线使用）。
+- ``chart_themes`` / ``color_matchings``：ggplot2 主题与配色函数。
+- ``topics``：395 个选题，阶段 ① 随机选取。
+
+模板本质是字符串，含大量花括号，拼接时只能用 ``str.replace``。
+"""
+
 chart_types = [
     'Single broken line',  
     'multiple broken lines (3 to 5 lines)',  
@@ -9,38 +19,6 @@ chart_types = [
     'simple column chart (vertical)',  
     'paired column chart (vertical)'  
 ]
-
-
-"""
-
-chart_types = ['Single broken line', 'multiple broken lines (3 to 5 lines)','single broken line represented by a dotted line',
-               'multiple broken lines represented by dotted lines','Single Pie Chart','General bar chart (horizontal)',
-               'paired bar chart (horizontal)','General column chart (vertical)','paired column chart (vertical)']
-
-def select_chart_list(chart_topic):
-    if chart_topic == "Single broken line":
-        return Single_broken_line
-    elif chart_topic == "multiple broken lines (3 to 5 lines)":
-        return multiple_broken_lines
-    elif chart_topic == "single broken line represented by a dotted line":
-        return Single_broken_line_dotted
-    elif chart_topic == "multiple broken lines represented by dotted lines":
-        return multiple_broken_lines_dotted
-    elif chart_topic == "Single Pie Chart":
-        return Single_Pie_Chart
-    elif chart_topic == "simple bar chart (horizontal)":
-        return simple_bar_chart
-    elif chart_topic == "paired bar chart (horizontal)":
-        return paired_bar_chart
-    elif chart_topic == "simple column chart (vertical)":
-        return simple_column_chart
-    elif chart_topic == "paired column chart (vertical)":
-        return paired_column_chart
-    else:
-        return None
-               
-
-"""
 
 
 Single_broken_line = [

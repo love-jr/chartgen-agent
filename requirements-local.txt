@@ -1,0 +1,4 @@
+# 本地推理对照实验（Qwen2.5 系列）额外需要
+# 用法：pip install -r requirements.txt -r requirements-local.txt
+torch>=2.0.0
+transformers>=4.30.0

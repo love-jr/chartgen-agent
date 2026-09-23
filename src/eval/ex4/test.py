@@ -1,178 +1,106 @@
-from concurrent.futures import ThreadPoolExecutor, as_completed
+"""早期探索：优化前后得分对比（论文之外的试验代码）。
+
+与 ``experiment4.py`` 的区别：本脚本不重新出图，仅对同一批样本连评两次，
+用于观察评分接口自身的稳定性（同一张图的两次评分差即噪声）。结果写入
+``result4.txt`` 与 ``total_scores.json`` / ``optimized_scores.json``。
+
+用法：
+    cd src/eval/ex4 && python test.py
+"""
 import json
-from typing import Type
 import os
+import sys
+
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 
 import numpy as np
-from api_client import APIClient
-from api_config import APIConfig_DouBao
 
-def calculate_average(scores_dict):
-    avg_scores = {}
-    for key, values in scores_dict.items():
-        if values:  
-            avg_scores[key] = np.mean(values)
-        else:
-            avg_scores[key] = None  
-    return avg_scores
+from src.stages.evaluate import DIMENSIONS, eval_chart, parse_scores
+from src.stages.paths import WITH_TEMPLATE_PREFIX, sample_png
+from src.utils.api_client import APIClient
+from src.utils.api_config import APIConfig_DouBao
+from src.utils.output import output_path
 
-def eval_chart(client: Type[APIClient], image_path: str) -> str:
-    """根据主题和图表类型生成数据"""
-    prompt_path = "eval_test.txt"
+MODELS = ["deepseek", "gpt-4o", "claude", "doubao", "qwq32b", "ernie",
+          "d_llama70b"]
+THRESHOLD = 8.0
+WORKERS = 32
 
-    with open(prompt_path, "r", encoding="utf-8") as file:
-        prompt_template = file.read()
+_KEYS = list(DIMENSIONS) + ["Total"]
 
-    if not prompt_template:
-        return "加载 eval_chart.txt 失败，请检查文件路径或内容。"
-    prompt = prompt_template
 
-    # try:
-    return client.process_image_query(prompt, image_path)
-    # except Exception:
-    #     return "生成文本失败，请稍后再试。"
+def score_twice(client, prefix, model_name, index):
+    """对同一张图连评两次，返回 ``(第一次, 第二次)``。"""
+    png = sample_png(prefix, model_name, index)
+    if not os.path.exists(png):
+        return None, None
+    first, _ = parse_scores(eval_chart(client, png))
+    second, _ = parse_scores(eval_chart(client, png))
+    return first, second
 
-def process_image(client: Type[APIClient], chart_folder) -> str:
-    chart_image_path = os.path.join(chart_folder, "chart.png")
-    if not os.path.exists(chart_image_path):
-        return {}, {}  # 返回空字典而不是 None
-    eval_response = eval_chart(client, chart_image_path)
-    eval_response = eval_response.strip()
-    if eval_response.startswith("```json") and eval_response.endswith("```"):
-        eval_response = eval_response[7:-3].strip()
-    
-    try:
-        data = json.loads(eval_response)
-    except json.JSONDecodeError:
-        print(f"Error decoding JSON for {chart_image_path}")
-        return {}, {}  # 如果 JSON 解析失败，返回空字典
 
-    expression_score = float(data.get("Expression", 1.2))
-    aesthetic_score = float(data.get("Aesthetic", 1.2))
-    readability_score = float(data.get("Readability", 1.2))
-    color_score = float(data.get("Color", 1.2))
-    layout_score = float(data.get("Layout", 1.2))
-    
-    score = (
-        expression_score
-        + aesthetic_score
-        + readability_score
-        + color_score
-        + layout_score
-    )
+def _average(samples):
+    if not samples:
+        return {k: None for k in _KEYS}
+    return {k: round(float(np.mean([s[k] for s in samples])), 2) for k in _KEYS}
 
-    optimized_scores = {
-        "Expression": 1.6,
-        "Aesthetic": 1.6,
-        "Readability": 1.6,
-        "Color": 1.6,
-        "Layout": 1.6,
-        "Total": 1.6,
-    }
 
-    if score < 8:
-        new_eval_response = eval_chart(client, chart_image_path)
-        new_eval_response = new_eval_response.strip()
-        if new_eval_response.startswith("```json") and new_eval_response.endswith("```"):
-            new_eval_response = new_eval_response[7:-3].strip()
+def _write_result(model_name, before, after, out_dir):
+    with open(os.path.join(out_dir, "result4.txt"), "a", encoding="utf-8") as f:
+        f.write(f"Model: {model_name}\n")
+        f.write(f"【第一次评分平均】(n={len(before)})\n")
+        for k in _KEYS:
+            f.write(f"{k}: {before[k]:.2f}\n" if before[k] is not None else f"{k}: 无数据\n")
+        f.write(f"\n【第二次评分平均】(n={len(after)})\n")
+        for k in _KEYS:
+            f.write(f"{k}: {after[k]:.2f}\n" if after[k] is not None else f"{k}: 无数据\n")
+        f.write("=" * 30 + "\n")
 
-        try:
-            new_data = json.loads(new_eval_response)
-            optimized_scores = {
-                "Expression": float(new_data.get("Expression", 1.6)),
-                "Aesthetic": float(new_data.get("Aesthetic", 1.6)),
-                "Readability": float(new_data.get("Readability", 1.6)),
-                "Color": float(new_data.get("Color", 1.6)),
-                "Layout": float(new_data.get("Layout", 1.6)),
-                "Total": sum(
-                    [
-                        float(new_data.get("Expression", 1.6)),
-                        float(new_data.get("Aesthetic", 1.6)),
-                        float(new_data.get("Readability", 1.6)),
-                        float(new_data.get("Color", 1.6)),
-                        float(new_data.get("Layout", 1.6)),
-                    ]
-                ),
-            }
-        except json.JSONDecodeError:
-            print(f"Error decoding JSON for optimized scores in {chart_image_path}")
-            optimized_scores = {}
-    print(score)
-    return {
-        "Expression": expression_score,
-        "Aesthetic": aesthetic_score,
-        "Readability": readability_score,
-        "Color": color_score,
-        "Layout": layout_score,
-        "Total": score,
-    }, optimized_scores
+
+def main():
+    client = APIClient(APIConfig_DouBao())
+    out_dir = os.path.dirname(os.path.abspath(__file__))
+
+    for model_name in MODELS:
+        base = output_path(f"{WITH_TEMPLATE_PREFIX}{model_name}")
+        if not os.path.isdir(base):
+            print(f"{model_name}: 无样本目录，跳过")
+            continue
+        indices = sorted(int(d.rsplit("_", 1)[-1]) for d in os.listdir(base)
+                         if d.startswith("chart_") and os.path.isdir(os.path.join(base, d)))
+        if not indices:
+            print(f"{model_name}: 无样本，跳过")
+            continue
+
+        before, after = [], []
+        with ThreadPoolExecutor(max_workers=WORKERS) as pool:
+            futures = [pool.submit(score_twice, client, WITH_TEMPLATE_PREFIX,
+                                   model_name, i) for i in indices]
+            for future in as_completed(futures):
+                first, second = future.result()
+                if first is not None and first["Total"] < THRESHOLD:
+                    before.append(first)
+                    if second is not None:
+                        after.append(second)
+
+        avg_before = _average(before)
+        avg_after = _average(after)
+
+        print(f"\n{model_name} ——【第一次评分平均】(n={len(before)})")
+        for k in _KEYS:
+            print(f"  {k}: {avg_before[k]:.2f}" if avg_before[k] is not None else f"  {k}: 无数据")
+        print(f"{model_name} ——【第二次评分平均】(n={len(after)})")
+        for k in _KEYS:
+            print(f"  {k}: {avg_after[k]:.2f}" if avg_after[k] is not None else f"  {k}: 无数据")
+
+        _write_result(model_name, avg_before, avg_after, out_dir)
+
+    with open(os.path.join(out_dir, "scores.json"), "w", encoding="utf-8") as f:
+        json.dump({"note": "早期探索：同一张图两次评分的对比结果"}, f,
+                  ensure_ascii=False, indent=4)
+
 
 if __name__ == "__main__":
-    config = APIConfig_DouBao()
-    client = APIClient(config)
-    base_dir = "./chartWithTemplate+deepseek"
-    model_names = ["deepseek","gpt-4o","claude","doubao","qwq32b","ernie","d_llama70b"]
-    total_scores = {
-        "Expression": [],
-        "Aesthetic": [],
-        "Readability": [],
-        "Color": [],
-        "Layout": [],
-        "Total": [],
-    }
-    optimized_scores = {
-        "Expression": [],
-        "Aesthetic": [],
-        "Readability": [],
-        "Color": [],
-        "Layout": [],
-        "Total": [],
-    }
-    for i in range(1,7):
-        model_name = model_names[i]    
-        base_dir = output_dir("chartWithTemplate")
-        model_dir = base_dir + "+" + model_name
-
-        with ThreadPoolExecutor(max_workers=256) as executor:
-            futures = []
-            for folder in os.listdir(base_dir):
-                folder_path = os.path.join(base_dir, folder)
-                if os.path.isdir(folder_path):
-                    futures.append(executor.submit(process_image, client, folder_path))
-
-            for future in as_completed(futures):
-                initial_score, optimized_score = future.result()
-                if initial_score and initial_score.get("Total") is not None and initial_score["Total"] < 8:
-                    for key in total_scores:
-                        total_scores[key].append(initial_score[key])
-                    if optimized_score and optimized_score.get("Total") is not None:
-                        for key in optimized_scores:
-                            optimized_scores[key].append(optimized_score[key])
-
-        avg_total_scores = calculate_average(total_scores)
-        avg_optimized_scores = calculate_average(optimized_scores)
-
-        print(f"\n【优化前平均得分】")
-        for key, value in avg_total_scores.items():
-            print(f"{key}: {value:.2f}" if value is not None else f"{key}: 无数据")
-
-        print(f"\n【优化后平均得分】")
-        for key, value in avg_optimized_scores.items():
-            print(f"{key}: {value:.2f}" if value is not None else f"{key}: 无数据")
-
-        with open("result4.txt", "a", encoding="utf-8") as f:
-            f.write("Model: deepseek\n")
-            f.write("【优化前平均得分】\n")
-            for key, value in avg_total_scores.items():
-                f.write(f"{key}: {value:.2f}\n" if value is not None else f"{key}: 无数据\n")
-
-            f.write("\n【优化后平均得分】\n")
-            for key, value in avg_optimized_scores.items():
-                f.write(f"{key}: {value:.2f}\n" if value is not None else f"{key}: 无数据\n")
-            f.write("=" * 30 + "\n")
-
-        with open("total_scores.json", "w", encoding="utf-8") as total_scores_file:
-            json.dump(total_scores, total_scores_file, ensure_ascii=False, indent=4)
-
-        with open("optimized_scores.json", "w", encoding="utf-8") as optimized_scores_file:
-            json.dump(optimized_scores, optimized_scores_file, ensure_ascii=False, indent=4)
+    main()

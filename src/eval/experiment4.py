@@ -1,194 +1,104 @@
-from concurrent.futures import ThreadPoolExecutor, as_completed
+"""实验四：优化前后得分对比。
+
+取出带模板路线中初评低于阈值（默认 7 分）的样本，用阶段 ③ 的优化提示词
+改写代码并重新出图，再评一次，比较优化前后的平均分。结果追加到
+``result4.txt``。
+
+用法：
+    cd src/eval && python experiment4.py [样本父目录]
+"""
 import os
-import json
 import sys
 
-import numpy as np
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
 
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
-# 将项目根目录加入系统路径
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
-from src.code_withTemplate.data_generator import generate_data, generate_data_local_model
-from src.code_withTemplate.data_saver import save_generated_data
-from src.code_withTemplate.code_generator import generate_code_for_chart,generate_code_for_chart_local_model
-from src.code_optimazation.code_executor import _sanitize_output_r
-from src.code_optimazation.eval_chart import eval_chart
-from src.code_optimazation.optimize_code import optimize_code
-from config.list import chart_themes,chart_types,color_matchings,topics,Single_broken_line,multiple_broken_lines,Single_broken_line_dotted,multiple_broken_lines_dotted,Single_Pie_Chart,simple_bar_chart,paired_bar_chart,simple_column_chart,paired_column_chart
-from src.utils.api_config import APIConfig
+from src.eval.common import make_client, sample_indices
+from src.stages.evaluate import DIMENSIONS, eval_chart, parse_scores
+from src.stages.execute import run_r_code
+from src.stages.optimize import optimize_code
+from src.stages.paths import WITH_TEMPLATE_PREFIX, sample_dir, sample_png
 from src.utils.output import output_dir
-from src.utils.api_config1 import APIConfig1
-from src.utils.api_client import APIClient, LocalModelClient
-from src.utils.api_config_deepseek import APIConfig_Deepseek
-from src.utils.api_config_doubao import APIConfig_DouBao
-from src.utils.api_config_qwq32b import APIConfig_QWQ32B
-from src.utils.api_config_ernie import APIConfig_ERNIE
-from src.eval.count import count_subdirectories
 
-def process_chart(client, chart_folder, model_name):
-    """处理每个图表文件夹，进行评估和优化"""
-    chart_image_path = os.path.join(chart_folder, 'chart.png')
-    if not os.path.exists(chart_image_path):
-        return None
-    eval_response = eval_chart(client, chart_image_path)
-    print(chart_image_path)
-    eval_response = eval_response.strip()
-    if eval_response.startswith("```json") and eval_response.endswith("```"):
-        eval_response = eval_response[7:-3].strip()
-    print(eval_response)
+MODEL_NAME = "deepseek"
+THRESHOLD = 7.0             # 低于此分才优化
+WORKERS = 8
+RESULTS_FILE = "result4.txt"
+
+_KEYS = list(DIMENSIONS) + ["Total"]
+
+
+def process_one(eval_client, optimize_client, index):
+    """评一次 → 低于阈值则优化并重评，返回 ``(index, 优化前, 优化后)``。"""
+    png = sample_png(WITH_TEMPLATE_PREFIX, MODEL_NAME, index)
+    if not os.path.exists(png):
+        return index, None, None
+
+    before, suggestion = parse_scores(eval_chart(eval_client, png))
+    if before is None or before["Total"] >= THRESHOLD:
+        return index, before, None
+
+    folder = sample_dir(WITH_TEMPLATE_PREFIX, MODEL_NAME, index)
+    code = optimize_code(optimize_client, folder, suggestion, png)
+    if not code:
+        return index, before, None
     try:
-        data = json.loads(eval_response)
-        expression_score = float(data.get("Expression", 1.2))
-        aesthetic_score = float(data.get("Aesthetic", 1.2))
-        readability_score = float(data.get("Readability", 1.2))
-        color_score = float(data.get("Color", 1.2))
-        layout_score = float(data.get("Layout", 1.2))
-        suggestion = data.get('suggestion', "")
-
-        score = expression_score + aesthetic_score + readability_score + color_score + layout_score
-
-    except json.JSONDecodeError:
-        print(f"Error decoding JSON: {eval_response}")
-        return None
+        run_r_code(code, folder)
     except Exception as e:
-        print(f"An error occurred: {e}")
+        print(f"[{index:04d}] 优化后出图失败: {e}")
+        return index, before, None
+
+    after, _ = parse_scores(eval_chart(eval_client, png))
+    return index, before, after
+
+
+def _average(samples):
+    if not samples:
         return None
+    return {k: round(sum(s[k] for s in samples) / len(samples), 2) for k in _KEYS}
 
-    optimized_scores = {
-        "Expression": None,
-        "Aesthetic": None,
-        "Readability": None,
-        "Color": None,
-        "Layout": None,
-        "Total": None
-    }
 
-    try:
-        if score < 7:
-            print(f"图表评分为 {score}，需要优化。正在优化 temp_code.R...")
-            optimized_code = optimize_code(client, chart_folder, suggestion)
+def main():
+    eval_client = make_client("doubao")     # 评分统一用 DouBao 视觉模型
+    optimize_client = make_client(MODEL_NAME)
 
-            _sanitize_output_r(optimized_code, chart_folder)
+    indices = sample_indices(WITH_TEMPLATE_PREFIX, MODEL_NAME)
+    if not indices:
+        raise SystemExit(f"没有找到样本：{output_dir(f'{WITH_TEMPLATE_PREFIX}{MODEL_NAME}')}")
 
-            # 获取优化后图表的评分
-            new_eval_response = eval_chart(client, chart_image_path)
-            new_eval_response = new_eval_response.strip()
-            if new_eval_response.startswith("```json") and new_eval_response.endswith("```"):
-                new_eval_response = new_eval_response[7:-3].strip()
-            
-            try:
-                new_data = json.loads(new_eval_response)
-                optimized_scores = {
-                    "Expression": float(new_data.get("Expression", 1.4)),
-                    "Aesthetic": float(new_data.get("Aesthetic", 1.4)),
-                    "Readability": float(new_data.get("Readability", 1.4)),
-                    "Color": float(new_data.get("Color", 1.4)),
-                    "Layout": float(new_data.get("Layout", 1.4)),
-                    "Total": sum([
-                        float(new_data.get("Expression", 1.4)),
-                        float(new_data.get("Aesthetic", 1.4)),
-                        float(new_data.get("Readability", 1.4)),
-                        float(new_data.get("Color", 1.4)),
-                        float(new_data.get("Layout", 1.4))
-                    ])
-                }
-            except json.JSONDecodeError:
-                print(f"Error decoding optimized JSON: {new_eval_response}")
-            except Exception as e:
-                print(f"Error processing optimized chart: {e}")
-        else:
-            print(f"图表评分为 {score}，无需优化。")
+    before_all, after_all = [], []
+    with ThreadPoolExecutor(max_workers=WORKERS) as pool:
+        futures = [pool.submit(process_one, eval_client, optimize_client, i)
+                   for i in indices]
+        for future in as_completed(futures):
+            index, before, after = future.result()
+            if before is not None and before["Total"] < THRESHOLD:
+                before_all.append(before)
+                if after is not None:
+                    after_all.append(after)
 
-    except Exception as e:
-        print(f"处理评估结果时出错: {e}")
+    avg_before = _average(before_all)
+    avg_after = _average(after_all)
 
-    return {
-        "Expression": expression_score,
-        "Aesthetic": aesthetic_score,
-        "Readability": readability_score,
-        "Color": color_score,
-        "Layout": layout_score,
-        "Total": score
-    }, optimized_scores
-def calculate_average(scores_dict):
-    avg_scores = {}
-    for key, values in scores_dict.items():
-        if values:  
-            avg_scores[key] = np.mean(values)
-        else:
-            avg_scores[key] = None  
-    return avg_scores
+    print(f"\n【优化前平均得分】(n={len(before_all)})")
+    for k in _KEYS:
+        print(f"{k}: {avg_before[k]:.2f}" if avg_before else f"{k}: 无数据")
+    print(f"\n【优化后平均得分】(n={len(after_all)})")
+    for k in _KEYS:
+        print(f"{k}: {avg_after[k]:.2f}" if avg_after else f"{k}: 无数据")
+
+    with open(RESULTS_FILE, "a", encoding="utf-8") as f:
+        f.write(f"Model: {MODEL_NAME}\n")
+        f.write(f"Threshold: {THRESHOLD}\n")
+        f.write(f"【优化前平均得分】(n={len(before_all)})\n")
+        for k in _KEYS:
+            f.write(f"{k}: {avg_before[k]:.2f}\n" if avg_before else f"{k}: 无数据\n")
+        f.write(f"\n【优化后平均得分】(n={len(after_all)})\n")
+        for k in _KEYS:
+            f.write(f"{k}: {avg_after[k]:.2f}\n" if avg_after else f"{k}: 无数据\n")
+        f.write("=" * 30 + "\n")
+
 
 if __name__ == "__main__":
-    config = APIConfig()
-    config1 = APIConfig1()
-    client = APIClient(config)
-    client1 = APIClient(config1)
-    config_deepseek = APIConfig_Deepseek()
-    client_deepseek = APIClient(config_deepseek)
-    config_doubao = APIConfig_DouBao()
-    client_doubao = APIClient(config_doubao)
-    config_qwq32b = APIConfig_QWQ32B()
-    client_qwq32b = APIClient(config_qwq32b)
-    config_ernie = APIConfig_ERNIE()
-    client_ernie = APIClient(config_ernie)
-
-    clients = [client_deepseek,client,client1,client_doubao,client_qwq32b,client_ernie]
-    model_names = ["deepseek","gpt-4o","claude","doubao","qwq32b","ernie","d_llama70b"]
-    # model_dirs = ["Qwen2.5-7B-Instruct", "Qwen2.5-1.5B-Instruct"]
-    model_dirs = []
-    total_scores = [] 
-    num_folders = 0
-
-    for i in range(0, 1):
-        # c = clients[i]
-        model_name = model_names[i]    
-        base_dir = output_dir("chartWithTemplate")
-        model_dir = base_dir + "+" + model_name
-
-        total_scores = {"Expression": [], "Aesthetic": [], "Readability": [], "Color": [], "Layout": [], "Total": []}
-        optimized_scores = {"Expression": [], "Aesthetic": [], "Readability": [], "Color": [], "Layout": [], "Total": []}
-        with ThreadPoolExecutor(max_workers=1) as executor:
-            futures = {}
-
-            for folder in os.listdir(model_dir):
-                folder_path = os.path.join(model_dir, folder)
-                if os.path.isdir(folder_path):
-                    futures[executor.submit(process_chart, client_doubao, folder_path, model_name)] = folder_path
-
-            for future in as_completed(futures):
-                try:
-                    initial_score, optimized_score = future.result()
-                    if initial_score is not None and initial_score["Total"] < 7:
-                            for key in total_scores:
-                                total_scores[key].append(initial_score[key])
-
-                            if optimized_score["Total"] is not None:
-                                for key in optimized_scores:
-                                    optimized_scores[key].append(optimized_score[key])
-
-                except Exception as e:
-                    print(f"Error processing chart: {e}")
-
-    avg_total_scores = calculate_average(total_scores)
-    avg_optimized_scores = calculate_average(optimized_scores)
-
-    print(f"\n【优化前平均得分】")
-    for key, value in avg_total_scores.items():
-        print(f"{key}: {value:.2f}" if value is not None else f"{key}: 无数据")
-
-    print(f"\n【优化后平均得分】")
-    for key, value in avg_optimized_scores.items():
-        print(f"{key}: {value:.2f}" if value is not None else f"{key}: 无数据")
-
-    with open("result4.txt", "a", encoding="utf-8") as f:
-        f.write(f"Model: {model_name}\n")
-        f.write("【优化前平均得分】\n")
-        for key, value in avg_total_scores.items():
-            f.write(f"{key}: {value:.2f}\n" if value is not None else f"{key}: 无数据\n")
-
-        f.write("\n【优化后平均得分】\n")
-        for key, value in avg_optimized_scores.items():
-            f.write(f"{key}: {value:.2f}\n" if value is not None else f"{key}: 无数据\n")
-        f.write("=" * 30 + "\n")
+    main()

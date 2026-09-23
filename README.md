@@ -12,9 +12,9 @@
 
 | 阶段 | 做什么 | 代码位置 |
 |---|---|---|
-| ① 数据生成 | 依据主题与图表类型，生成符合现实逻辑的图表数据 | `src/*/data_generator.py` |
+| ① 数据生成 | 依据主题与图表类型，生成符合现实逻辑的图表数据 | `src/stages/data.py` |
 | ② 代码生成 | 把数据转成 R/ggplot2 绘图代码 | `src/*/code_generator.py` |
-| ③ 评估与优化 | 对成图打分；低于阈值则依据评语优化代码并重新出图 | `src/code_optimazation/` |
+| ③ 评估与优化 | 对成图打分；低于阈值则依据评语优化代码并重新出图 | `src/stages/evaluate.py`、`src/stages/optimize.py` |
 
 ```
 主题 + 图表类型
@@ -33,7 +33,8 @@
 
 **Python**
 ```bash
-pip install -r requirements.txt
+pip install -r requirements.txt          # 只跑 API 路线
+pip install -r requirements-local.txt    # 另需本地推理对照实验时
 ```
 
 **R 环境**（阶段 ② 的产物是 R 代码，必需）
@@ -96,13 +97,16 @@ config/
   list.py                图表类型、主题、配色、模板定义
   prompts/               提示词模板（中英双语）
 src/
-  code_withTemplate/     带模板路线
-  code_withoutTemplate/  不带模板路线
-  code_optimazation/     阶段 ③：评分与代码优化
+  code_withTemplate/     带模板路线（生成 + 入口）
+  code_withoutTemplate/  不带模板路线（生成 + 入口）
+  stages/                三阶段公共实现：数据、出图、评分、优化、路径
+  code_optimazation/     阶段 ③ 的批量评分入口
   eval/                  多模型对比与消融实验
-  utils/                 API 客户端、配置与输出路径解析
+  utils/                 API 客户端与配置、输出路径、提示词读取
 ```
+
+两条路线的阶段 ①③ 完全一致，原先各自复制了一份，现已收敛到 `src/stages/`；`code_withTemplate/` 与 `code_withoutTemplate/` 只保留各自的阶段 ②（提示词不同）与入口。
 
 ## 说明
 
-仓库内的 `*.png`、`Rplots.pdf`、`*.log`、`*_scores.json` 为历史实验产物，运行不需要。`src/eval/ex4/` 是论文之外的早期探索代码，一并保留供参考。
+仓库内的 `*.png`、`Rplots.pdf`、`*.log` 为历史实验产物，运行不需要。`src/eval/ex4/` 是论文之外的早期探索代码，一并保留供参考。

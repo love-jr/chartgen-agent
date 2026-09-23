@@ -1,5 +1,4 @@
+# 仅 API 路线所需（experiment1~4、generate_datasets、两条 main）
 openai>=1.0.0
 httpx>=0.24.0
 numpy>=1.24.0
-torch>=2.0.0
-transformers>=4.30.0

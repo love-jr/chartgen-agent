@@ -1,29 +1,31 @@
-"""不带模板的图表生成流程。
+"""不带模板路线：批量生成图表。
 
-流程：随机选主题、图表类型、主题配色 → 生成数据 → 生成代码 → 优化代码 → Rscript 出图。
+流程：随机选主题、图表类型、主题配色 → 生成数据 → 生成代码 → 按配色优化
+代码 → Rscript 出图。对应论文中「不给参考模板」的一组实验。
+
+用法：
+    cd src/code_withoutTemplate && python main.py
 输出目录由 CHARTGEN_OUTPUT_DIR 决定，默认在项目根目录的 output/ 下。
 """
-from concurrent.futures import ThreadPoolExecutor, as_completed
 import os
 import random
-import json
 import sys
 
-from data_generator import generate_data
-from data_saver import save_generated_data
-from code_generator import generate_code_for_chart, generate_code_for_chart_optimization
-from code_executor import _sanitize_output_r
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
 
-# 将项目根目录加入系统路径
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 from config.list import chart_themes, chart_types, color_matchings, topics
-from src.utils.api_config import APIConfig
-from src.utils.api_config1 import APIConfig1
+from src.code_withoutTemplate.code_generator import (
+    generate_code_for_chart, generate_code_for_chart_optimization)
+from src.stages.data import generate_data, save_generated_data
+from src.stages.execute import run_r_code
+from src.stages.paths import WITHOUT_TEMPLATE_PREFIX, sample_dir
+from src.stages.pipeline import parse_response, run_batch
+from src.utils.api_config import APIConfig, APIConfig1
 from src.utils.api_client import APIClient
 
 MODEL_NAME = "gpt-4o"       # 用于区分输出子目录
 NUM_ITERATIONS = 50         # 生成次数，可调大
-MAX_WORKERS = 256
+MAX_WORKERS = 64
 
 
 def generate_and_process(client, optimizer_client, index, model_name):
@@ -33,38 +35,32 @@ def generate_and_process(client, optimizer_client, index, model_name):
     chart_theme = random.choice(chart_themes)
     color_matching = random.choice(color_matchings)
 
-    response_text = generate_data(client, topic, chart_type)
+    payload, err = parse_response(generate_data(client, topic, chart_type))
+    if payload is None:
+        return index, err
+
+    save_generated_data(payload["Data"], index, WITHOUT_TEMPLATE_PREFIX, model_name)
+
+    draft = generate_code_for_chart(
+        client, topic, payload["Data"], chart_type,
+        payload["Main Title"], payload["Subtitle"])
+    optimized = generate_code_for_chart_optimization(
+        model_name, optimizer_client, chart_theme, chart_type, color_matching,
+        draft, payload["Data Source"], index)
+
     try:
-        json_text = response_text.split("<output_begining>")[1].split("<output_ending>")[0].strip()
-        data = json.loads(json_text)
-    except (IndexError, json.JSONDecodeError, AttributeError) as e:
-        print(f"[{index:04d}] 数据解析失败：{type(e).__name__}: {e}")
-        return
-
-    save_generated_data(data["Data"], index, model_name)
-
-    generated_code = generate_code_for_chart(
-        client, topic, data["Data"], chart_type, data["Main Title"], data["Subtitle"])
-
-    optimized_code = generate_code_for_chart_optimization(
-        model_name, optimizer_client, chart_theme, chart_type,
-        color_matching, generated_code, data["Data Source"], index)
-
-    _sanitize_output_r(optimized_code, index, model_name)
+        run_r_code(optimized, sample_dir(WITHOUT_TEMPLATE_PREFIX, model_name, index))
+    except Exception as e:
+        return index, f"出图失败: {e}"
+    return index, ""
 
 
 def main():
     client = APIClient(APIConfig())
     optimizer_client = APIClient(APIConfig1())
-
-    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-        futures = [executor.submit(generate_and_process, client, optimizer_client, i, MODEL_NAME)
-                   for i in range(1, NUM_ITERATIONS + 1)]
-        for future in as_completed(futures):
-            try:
-                future.result()
-            except Exception as e:
-                print(f"任务失败: {e}")
+    run_batch(range(1, NUM_ITERATIONS + 1),
+              lambda i: generate_and_process(client, optimizer_client, i, MODEL_NAME),
+              max_workers=MAX_WORKERS)
 
 
 if __name__ == "__main__":

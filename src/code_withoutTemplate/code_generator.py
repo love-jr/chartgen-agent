@@ -1,75 +1,76 @@
-import re
-import sys
-from typing import Type
-import os
+"""阶段 ②（不带模板路线）：仅依据数据与图表类型生成 ggplot2 代码。
+
+提示词用 ``code_generation.txt``，不给参考模板；生成后还可交给优化提示词
+（``code_optimazation.txt``）按主题/配色进一步改写。
+"""
 import json
+import os
+import sys
 
-# 将项目根目录加入系统路径
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
-from src.utils.api_client import APIClient, LocalModelClient
-from src.utils.output import output_dir
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
 
-from src.code_withTemplate.prompt_loader import load_prompt
+from src.stages.optimize import redirect_save_path
+from src.stages.paths import WITHOUT_TEMPLATE_PREFIX, sample_png
+from src.utils.prompt import PROMPTS_DIR, fill_prompt, load_prompt
 
-def generate_code_for_chart(client: Type[APIClient], topic:str, generated_data: str, chart_type: str, title:str,subtitle:str) -> str:
-    """根据生成的数据调用 API 生成可视化代码"""
-    prompt_path = os.path.join(os.path.dirname(__file__), '..','..','config', 'prompts', 'code_generation.txt')
-    prompt_template = load_prompt(prompt_path)
-    if not prompt_template:
-        return "加载 code_generation.txt 失败，请检查文件路径或内容。"
-    #列表类型转化
-    json_data_str = json.dumps(generated_data, ensure_ascii=False)
-    # 生成完整的 API 请求
-    prompt = prompt_template.replace("{topic}", topic).replace("{data}", json_data_str).replace("{chart_type}", chart_type).replace("{title}", title).replace("{subtitle}", subtitle)
-    
+PROMPT_PATH = os.path.join(PROMPTS_DIR, "code_generation.txt")
+OPTIMIZE_PROMPT_PATH = os.path.join(PROMPTS_DIR, "code_optimazation.txt")
+
+_LOAD_FAILED = "加载提示词失败，请检查文件路径或内容。"
+_GEN_FAILED = "生成代码失败，请稍后再试。"
+
+
+def _generate(prompt, client, png, model_name):
+    if not prompt:
+        return _LOAD_FAILED
     try:
-        generated_code = client.process_text_query(prompt)
-        return generated_code
+        return redirect_save_path(client.process_text_query(prompt), png)
     except Exception:
-        return "生成代码失败，请稍后再试。"
-    
+        return _GEN_FAILED
 
-def generate_code_for_chart_local_model(local_client:Type[LocalModelClient], topic:str, generated_data: str, chart_type: str, title:str,subtitle:str) -> str:
 
-    prompt_path = os.path.join(os.path.dirname(__file__), '..','..','config', 'prompts', 'code_generation.txt')
-    prompt_template = load_prompt(prompt_path)
-    if not prompt_template:
-        return "加载 code_generation.txt 失败，请检查文件路径或内容。"
-    #列表类型转化
-    json_data_str = json.dumps(generated_data, ensure_ascii=False)
-    # 生成完整的 API 请求
-    prompt = prompt_template.replace("{topic}", topic).replace("{data}", json_data_str).replace("{chart_type}", chart_type).replace("{title}", title).replace("{subtitle}", subtitle)
-    
+def generate_code_for_chart(client, topic, generated_data, chart_type, title,
+                            subtitle):
+    """按主题与标题生成绘图代码（本函数不改写输出路径，由调用方处理）。"""
+    template = load_prompt(PROMPT_PATH)
+    if not template:
+        return _LOAD_FAILED
+    prompt = fill_prompt(
+        template, topic=topic,
+        data=json.dumps(generated_data, ensure_ascii=False),
+        chart_type=chart_type, title=title, subtitle=subtitle)
     try:
-        generated_code = local_client.process_text_query(prompt)
-
-        return generated_code
+        return client.process_text_query(prompt)
     except Exception:
-        return "生成代码失败，请稍后再试。"
+        return _GEN_FAILED
 
-def generate_code_for_chart_optimization(model_name : str, client: Type[APIClient],chart_theme:str, chart_type: str, color_matching: str,generated_code,source:str, index: int) -> str:
-    """优化生成的代码"""
-    
-    prompt_path = os.path.join(os.path.dirname(__file__), '..','..','config', 'prompts', 'code_optimazation.txt')
-    
-    prompt_template = load_prompt(prompt_path)
-    if not prompt_template:
-        return "加载 code_optimazation.txt 失败，请检查文件路径或内容。"
-    # 生成完整的 API 请求
-    prompt = prompt_template.replace("{chart_theme}", chart_theme).replace("{color_matching}", color_matching).replace("{chart_type}", chart_type).replace("{source}", source).replace("{code}",generated_code)
 
+def generate_code_for_chart_local_model(local_client, topic, generated_data,
+                                        chart_type, title, subtitle):
+    """同上，改用本地推理模型。"""
+    template = load_prompt(PROMPT_PATH)
+    if not template:
+        return _LOAD_FAILED
+    prompt = fill_prompt(
+        template, topic=topic,
+        data=json.dumps(generated_data, ensure_ascii=False),
+        chart_type=chart_type, title=title, subtitle=subtitle)
     try:
-        optimized_code = client.process_text_query(prompt)
-        optimized_code = _replace_output_file_path(optimized_code, index, model_name)
-        return optimized_code
-
+        return local_client.process_text_query(prompt)
     except Exception:
-        return "生成代码失败，请稍后再试。"
+        return _GEN_FAILED
 
-def _replace_output_file_path(generated_code: str, index: int, model_name: str) -> str:
-    """把生成的 R 代码里的 save_filepath 替换为本机输出路径。"""
-    output_file_pattern = r"(save_filepath\s*=\s*['\"]).*?(['\"])"
-    chart_path = output_dir(f"chart+{model_name}", f"chart_{index:04d}", "chart.png")
-    # R 代码里用正斜杠，避免 Windows 反斜杠被当成转义
-    new_output_path = f"save_filepath = '{chart_path.replace(os.sep, '/')}'"
-    return re.sub(output_file_pattern, new_output_path, generated_code)
+
+def generate_code_for_chart_optimization(model_name, client, chart_theme,
+                                         chart_type, color_matching,
+                                         generated_code, source, index):
+    """按主题配色与数据来源改写代码，并把输出指向本机样本目录。"""
+    template = load_prompt(OPTIMIZE_PROMPT_PATH)
+    if not template:
+        return _LOAD_FAILED
+    prompt = fill_prompt(
+        template, chart_theme=chart_theme, color_matching=color_matching,
+        chart_type=chart_type, source=source, code=generated_code)
+    return _generate(prompt, client,
+                     sample_png(WITHOUT_TEMPLATE_PREFIX, model_name, index),
+                     model_name)
